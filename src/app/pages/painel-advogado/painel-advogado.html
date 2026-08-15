@@ -1,0 +1,232 @@
+<main class="lawyer-panel-page">
+  <div class="lawyer-panel-container">
+
+    <header class="lawyer-panel-header">
+      <div>
+        <span class="section-label">
+          PAINEL DO ADVOGADO
+        </span>
+
+        <h1>
+          Bem-vindo, {{ user()?.name }}
+        </h1>
+
+        <p>
+          Gerencie os atendimentos e acompanhe os agendamentos dos clientes.
+        </p>
+      </div>
+
+      <div class="lawyer-panel-header-actions">
+
+        <a
+          routerLink="/"
+          class="panel-button"
+        >
+          Voltar para o site
+        </a>
+
+        <button
+          type="button"
+          class="panel-logout"
+          (click)="logout()"
+        >
+          Sair
+        </button>
+
+      </div>
+    </header>
+
+    <section class="panel-stats">
+
+      <article class="panel-stat">
+        <span class="panel-stat-label">
+          AGENDAMENTOS
+        </span>
+
+        <strong class="panel-stat-value">
+          {{ totalAppointments }}
+        </strong>
+      </article>
+
+      <article class="panel-stat">
+        <span class="panel-stat-label">
+          PENDENTES
+        </span>
+
+        <strong class="panel-stat-value">
+          {{ pendingAppointments }}
+        </strong>
+      </article>
+
+      <article class="panel-stat">
+        <span class="panel-stat-label">
+          CONFIRMADOS
+        </span>
+
+        <strong class="panel-stat-value">
+          {{ confirmedAppointments }}
+        </strong>
+      </article>
+
+      <article class="panel-stat">
+        <span class="panel-stat-label">
+          CANCELADOS
+        </span>
+
+        <strong class="panel-stat-value">
+          {{ cancelledAppointments }}
+        </strong>
+      </article>
+
+    </section>
+
+    <section class="panel-section">
+
+      <div class="panel-section-header">
+        <div>
+          <span class="section-label">
+            ATENDIMENTOS
+          </span>
+
+          <h2>Agendamentos dos clientes</h2>
+        </div>
+      </div>
+
+      <div class="panel-card">
+
+        @if (appointments().length === 0) {
+
+          <div class="panel-empty">
+
+            <div class="panel-empty-icon">
+              📅
+            </div>
+
+            <h3>Nenhum agendamento encontrado</h3>
+
+            <p>
+              Quando um cliente solicitar um atendimento,
+              o agendamento aparecerá aqui.
+            </p>
+
+          </div>
+
+        } @else {
+
+          <div class="panel-table-wrapper">
+
+            <table class="panel-table">
+
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Área</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Mensagem</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                @for (
+                  appointment of appointments();
+                  track appointment.id
+                ) {
+
+                  <tr>
+
+                    <td>
+                      <div class="panel-client">
+                        <strong>{{ appointment.name }}</strong>
+                        <span>ID #{{ appointment.id }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="panel-contact">
+                        <span>{{ appointment.email }}</span>
+                        <span>{{ appointment.phone }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="panel-area">
+                        {{ appointment.area }}
+                      </span>
+                    </td>
+
+                    <td>
+                      {{ appointment.date }}
+                    </td>
+
+                    <td>
+                      {{ appointment.time }}
+                    </td>
+
+                    <td>
+                      <p class="panel-message">
+                        {{ appointment.message }}
+                      </p>
+                    </td>
+
+                    <td>
+                      <span
+                        class="panel-status"
+                        [class.pending]="appointment.status === 'pending'"
+                        [class.confirmed]="appointment.status === 'confirmed'"
+                        [class.cancelled]="appointment.status === 'cancelled'"
+                      >
+                        {{ getStatusLabel(appointment.status) }}
+                      </span>
+                    </td>
+
+                    <td>
+
+                      <div class="panel-actions">
+
+                        @if (appointment.status !== 'confirmed') {
+                          <button
+                            type="button"
+                            class="panel-action panel-action-confirm"
+                            (click)="confirmAppointment(appointment.id)"
+                          >
+                            Confirmar
+                          </button>
+                        }
+
+                        @if (appointment.status !== 'cancelled') {
+                          <button
+                            type="button"
+                            class="panel-action panel-action-cancel"
+                            (click)="cancelAppointment(appointment.id)"
+                          >
+                            Cancelar
+                          </button>
+                        }
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+  </div>
+</main>

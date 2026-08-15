@@ -1,0 +1,125 @@
+<main class="appointment-page">
+  <section class="appointment-hero">
+    <div class="container">
+      <span class="section-label">AGENDAMENTO</span>
+
+      <h1>Agende uma conversa com nossa equipe</h1>
+
+      <p>
+        Agende um atendimento jurídico com nossa equipe de profissionais.
+      </p>
+    </div>
+  </section>
+
+  <section class="appointment-content">
+    <div class="container">
+      <div class="appointment-layout">
+
+        <div class="appointment-info">
+          <span class="section-label">FALE CONOSCO</span>
+
+          <h2>Vamos entender como podemos ajudar</h2>
+
+          <p>
+            Cada situação jurídica possui suas particularidades. Por isso,
+            nossa equipe busca compreender seu caso antes de apresentar as
+            melhores alternativas.
+          </p>
+
+          <p>
+            Faça seu cadastro ou entre na sua conta para solicitar um
+            atendimento com nossa equipe.
+          </p>
+
+          <div class="appointment-benefits">
+
+            <div class="benefit">
+              <span class="benefit-icon">✓</span>
+
+              <div>
+                <h3>Atendimento personalizado</h3>
+
+                <p>
+                  Analisamos cada situação de acordo com as necessidades do
+                  cliente.
+                </p>
+              </div>
+            </div>
+
+            <div class="benefit">
+              <span class="benefit-icon">⚖</span>
+
+              <div>
+                <h3>Orientação jurídica</h3>
+
+                <p>
+                  Conte com profissionais preparados para orientar seu caso.
+                </p>
+              </div>
+            </div>
+
+            <div class="benefit">
+              <span class="benefit-icon">◆</span>
+
+              <div>
+                <h3>Compromisso e ética</h3>
+
+                <p>
+                  Nosso trabalho é baseado em responsabilidade e transparência.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="appointment-form-wrapper">
+
+          @if (isClient) {
+
+            <app-appointment-form></app-appointment-form>
+
+          } @else {
+
+            <div class="appointment-login">
+
+              <span class="appointment-login-label">
+                ÁREA DO CLIENTE
+              </span>
+
+              <h2>Entre ou cadastre-se para agendar</h2>
+
+              <p>
+                Para solicitar um atendimento, você precisa possuir uma conta
+                de cliente. Entre caso já possua cadastro ou crie sua conta
+                gratuitamente.
+              </p>
+
+              <div class="appointment-login-actions">
+
+                <a
+                  routerLink="/login"
+                  class="appointment-login-button appointment-login-primary"
+                >
+                  Entrar
+                </a>
+
+                <a
+                  routerLink="/cadastro"
+                  class="appointment-login-button appointment-login-secondary"
+                >
+                  Cadastre-se
+                </a>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>

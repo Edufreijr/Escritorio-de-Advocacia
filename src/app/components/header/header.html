@@ -1,0 +1,35 @@
+<header class="header">
+  <div class="header-container">
+
+    <a routerLink="/" class="logo">
+      <span class="logo-name">ARAÚJO FREITAS</span>
+      <span class="logo-subtitle">ADVOGADOS</span>
+    </a>
+
+    <nav class="navigation">
+      <a routerLink="/" class="nav-link">Início</a>
+      <a routerLink="/sobre" class="nav-link">Sobre</a>
+      <a routerLink="/areas" class="nav-link">Áreas de Atuação</a>
+      <a routerLink="/advogados" class="nav-link">Advogados</a>
+      <a routerLink="/agendamento" class="nav-link">Agendamento</a>
+      <a routerLink="/contato" class="nav-link">Contato</a>
+    </nav>
+
+    @if (authService.isLoggedIn()) {
+      <a
+        [routerLink]="panelRoute"
+        class="login-button"
+      >
+        {{ panelLabel }}
+      </a>
+    } @else {
+      <a
+        routerLink="/login"
+        class="login-button"
+      >
+        Login
+      </a>
+    }
+
+  </div>
+</header>

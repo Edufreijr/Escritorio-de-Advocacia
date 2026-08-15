@@ -1,0 +1,123 @@
+<form
+  class="contact-form"
+  [formGroup]="contactForm"
+  (ngSubmit)="submit()"
+>
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="name">Nome completo</label>
+
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Digite seu nome completo"
+        autocomplete="name"
+        [class.invalid]="isInvalid('name')"
+      />
+
+      @if (isInvalid('name')) {
+        <span class="error-message">
+          Informe seu nome completo.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="seuemail@exemplo.com"
+        autocomplete="email"
+        [class.invalid]="isInvalid('email')"
+      />
+
+      @if (isInvalid('email')) {
+        <span class="error-message">
+          Informe um e-mail válido.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefone</label>
+
+      <input
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="(00) 00000-0000"
+        autocomplete="tel"
+        [class.invalid]="isInvalid('phone')"
+      />
+
+      @if (isInvalid('phone')) {
+        <span class="error-message">
+          Informe um telefone válido.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="subject">Assunto</label>
+
+      <input
+        id="subject"
+        type="text"
+        formControlName="subject"
+        placeholder="Digite o assunto"
+        [class.invalid]="isInvalid('subject')"
+      />
+
+      @if (isInvalid('subject')) {
+        <span class="error-message">
+          Informe o assunto da mensagem.
+        </span>
+      }
+    </div>
+
+    <div class="form-group form-group-full">
+      <label for="message">Mensagem</label>
+
+      <textarea
+        id="message"
+        rows="7"
+        formControlName="message"
+        placeholder="Descreva como podemos ajudar"
+        [class.invalid]="isInvalid('message')"
+      ></textarea>
+
+      @if (isInvalid('message')) {
+        <span class="error-message">
+          Informe uma mensagem com pelo menos 10 caracteres.
+        </span>
+      }
+    </div>
+
+  </div>
+
+  @if (errorMessage) {
+    <div class="form-message form-message-error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="form-message form-message-success">
+      {{ successMessage }}
+    </div>
+  }
+
+  <button
+    type="submit"
+    class="submit-button"
+    [disabled]="contactForm.invalid && submitted"
+  >
+    Enviar mensagem
+  </button>
+</form>
+

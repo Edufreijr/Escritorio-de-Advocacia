@@ -1,0 +1,69 @@
+.lawyer-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.lawyer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.lawyer-image {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #1e293b;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.lawyer-content {
+  width: 100%;
+}
+
+.lawyer-role {
+  display: block;
+  margin-bottom: 14px;
+  color: #b08d57;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lawyer-card h3 {
+  margin: 0 0 8px;
+  color: #1e293b;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.lawyer-card p {
+  margin: 0 0 20px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.lawyer-link {
+  display: inline-block;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.lawyer-link:hover {
+  color: #b08d57;
+}

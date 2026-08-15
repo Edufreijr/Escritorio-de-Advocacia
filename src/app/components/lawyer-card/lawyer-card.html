@@ -1,0 +1,21 @@
+
+<article class="lawyer-card">
+  <div class="lawyer-image">
+    <span>{{ name().charAt(0) }}</span>
+  </div>
+
+  <div class="lawyer-content">
+    <span class="lawyer-role">{{ role() }}</span>
+
+    <h3>{{ name() }}</h3>
+
+    <p>{{ description() }}</p>
+
+    <a [routerLink]="link()" class="lawyer-link">
+      Ver perfil
+    </a>
+  </div>
+</article>
+
+
+

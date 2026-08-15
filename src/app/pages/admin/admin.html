@@ -1,0 +1,413 @@
+<main class="admin-page">
+  <div class="admin-container">
+
+    <header class="admin-header">
+      <div>
+        <span class="section-label">
+          PAINEL ADMINISTRATIVO
+        </span>
+
+        <h1>Bem-vindo ao painel</h1>
+
+        <p>
+          Gerencie os principais dados e atendimentos do escritório.
+        </p>
+      </div>
+
+      <div class="admin-header-actions">
+
+        <a
+          routerLink="/"
+          class="admin-button"
+        >
+          Voltar para o site
+        </a>
+
+        <button
+          type="button"
+          class="admin-logout"
+          (click)="logout()"
+        >
+          Sair
+        </button>
+
+      </div>
+    </header>
+
+    <section class="admin-stats">
+
+      <article class="admin-stat">
+        <span class="admin-stat-label">
+          ÁREAS
+        </span>
+
+        <strong class="admin-stat-value">
+          11
+        </strong>
+      </article>
+
+      <article class="admin-stat">
+        <span class="admin-stat-label">
+          EQUIPE
+        </span>
+
+        <strong class="admin-stat-value">
+          3
+        </strong>
+      </article>
+
+      <article class="admin-stat">
+        <span class="admin-stat-label">
+          AGENDAMENTOS
+        </span>
+
+        <strong class="admin-stat-value">
+          {{ totalAppointments }}
+        </strong>
+      </article>
+
+      <article class="admin-stat">
+        <span class="admin-stat-label">
+          MENSAGENS
+        </span>
+
+        <strong class="admin-stat-value">
+          {{ totalContacts }}
+        </strong>
+      </article>
+
+    </section>
+
+    <section class="admin-section">
+
+      <div class="admin-section-header">
+        <h2>Agendamentos</h2>
+      </div>
+
+      <div class="admin-card">
+
+        @if (appointments().length === 0) {
+
+          <div class="admin-empty">
+
+            <div class="admin-empty-icon">
+              📅
+            </div>
+
+            <h3>Nenhum agendamento encontrado</h3>
+
+            <p>
+              Quando um cliente solicitar um atendimento,
+              o agendamento aparecerá aqui.
+            </p>
+
+          </div>
+
+        } @else {
+
+          <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Área</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Mensagem</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                @for (
+                  appointment of appointments();
+                  track appointment.id
+                ) {
+
+                  <tr>
+
+                    <td>
+                      <div class="admin-client">
+                        <strong>{{ appointment.name }}</strong>
+                        <span>ID #{{ appointment.id }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="admin-contact">
+                        <span>{{ appointment.email }}</span>
+                        <span>{{ appointment.phone }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="admin-area">
+                        {{ appointment.area }}
+                      </span>
+                    </td>
+
+                    <td>{{ appointment.date }}</td>
+
+                    <td>{{ appointment.time }}</td>
+
+                    <td>
+                      <p class="admin-message">
+                        {{ appointment.message }}
+                      </p>
+                    </td>
+
+                    <td>
+                      <span
+                        class="admin-status"
+                        [class.pending]="appointment.status === 'pending'"
+                        [class.confirmed]="appointment.status === 'confirmed'"
+                        [class.cancelled]="appointment.status === 'cancelled'"
+                      >
+                        {{ getStatusLabel(appointment.status) }}
+                      </span>
+                    </td>
+
+                    <td>
+
+                      <div class="admin-actions">
+
+                        @if (appointment.status !== 'confirmed') {
+                          <button
+                            type="button"
+                            class="admin-button admin-button-confirm"
+                            (click)="confirmAppointment(appointment.id)"
+                          >
+                            Confirmar
+                          </button>
+                        }
+
+                        @if (appointment.status !== 'cancelled') {
+                          <button
+                            type="button"
+                            class="admin-button admin-button-cancel"
+                            (click)="cancelAppointment(appointment.id)"
+                          >
+                            Cancelar
+                          </button>
+                        }
+
+                        <button
+                          type="button"
+                          class="admin-button admin-button-delete"
+                          (click)="removeAppointment(appointment.id)"
+                        >
+                          Excluir
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+    <section class="admin-section">
+
+      <div class="admin-section-header">
+        <h2>Mensagens recebidas</h2>
+      </div>
+
+      <div class="admin-card">
+
+        @if (contacts().length === 0) {
+
+          <div class="admin-empty">
+
+            <div class="admin-empty-icon">
+              ✉
+            </div>
+
+            <h3>Nenhuma mensagem encontrada</h3>
+
+            <p>
+              Quando um cliente enviar uma mensagem pelo formulário de contato,
+              ela aparecerá aqui.
+            </p>
+
+          </div>
+
+        } @else {
+
+          <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Assunto</th>
+                  <th>Mensagem</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                @for (
+                  contact of contacts();
+                  track contact.id
+                ) {
+
+                  <tr>
+
+                    <td>
+                      <div class="admin-client">
+                        <strong>{{ contact.name }}</strong>
+                        <span>ID #{{ contact.id }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="admin-contact">
+                        <span>{{ contact.email }}</span>
+                        <span>{{ contact.phone }}</span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="admin-area">
+                        {{ contact.subject }}
+                      </span>
+                    </td>
+
+                    <td>
+                      <p class="admin-message">
+                        {{ contact.message }}
+                      </p>
+                    </td>
+
+                    <td>
+                      {{ contact.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                    </td>
+
+                    <td>
+
+                      <span
+                        class="admin-status"
+                        [class.pending]="contact.status === 'new'"
+                        [class.confirmed]="contact.status === 'answered'"
+                        [class.cancelled]="contact.status === 'read'"
+                      >
+                        {{ getContactStatusLabel(contact.status) }}
+                      </span>
+
+                    </td>
+
+                    <td>
+
+                      <div class="admin-actions">
+
+                        @if (contact.status === 'new') {
+
+                          <button
+                            type="button"
+                            class="admin-button admin-button-confirm"
+                            (click)="markContactAsRead(contact.id)"
+                          >
+                            Marcar como lida
+                          </button>
+
+                        }
+
+                        @if (contact.status !== 'answered') {
+
+                          <button
+                            type="button"
+                            class="admin-button admin-button-confirm"
+                            (click)="markContactAsAnswered(contact.id)"
+                          >
+                            Respondida
+                          </button>
+
+                        }
+
+                        <button
+                          type="button"
+                          class="admin-button admin-button-delete"
+                          (click)="removeContact(contact.id)"
+                        >
+                          Excluir
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+    <section class="admin-section">
+
+      <div class="admin-section-header">
+        <h2>Ações rápidas</h2>
+      </div>
+
+      <div class="admin-card">
+
+        <div class="admin-actions">
+
+          <a routerLink="/areas" class="admin-button">
+            Áreas de atuação
+          </a>
+
+          <a routerLink="/advogados" class="admin-button">
+            Advogados
+          </a>
+
+          <a routerLink="/agendamento" class="admin-button">
+            Novo agendamento
+          </a>
+
+          <a routerLink="/contato" class="admin-button">
+            Contato
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+</main>
+
+

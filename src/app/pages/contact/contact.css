@@ -1,0 +1,153 @@
+.contact-page {
+  width: 100%;
+}
+
+.container {
+  width: min(1200px, 90%);
+  margin: 0 auto;
+}
+
+.contact-hero {
+  padding: 110px 0;
+  background: #1c1c1c;
+  color: #ffffff;
+}
+
+.contact-hero h1 {
+  max-width: 850px;
+  margin: 0 0 25px;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.contact-hero p {
+  max-width: 700px;
+  margin: 0;
+  color: #e5e5e5;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  display: block;
+  margin-bottom: 18px;
+  color: #b08d57;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.contact-content {
+  padding: 100px 0;
+  background: #f8f8f8;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 70px;
+  align-items: start;
+}
+
+.contact-info {
+  padding-top: 15px;
+}
+
+.contact-info h2 {
+  margin: 0 0 25px;
+  color: #1f2937;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.contact-info > p {
+  max-width: 600px;
+  margin: 0 0 35px;
+  color: #4b5563;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.contact-detail {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #b08d57;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.contact-detail h3 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.contact-detail p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.contact-form-wrapper {
+  padding: 35px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+.contact-form-wrapper app-contact-form {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .contact-info {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding: 80px 0;
+  }
+
+  .contact-content {
+    padding: 70px 0;
+  }
+
+  .contact-form-wrapper {
+    padding: 25px 20px;
+  }
+
+  .contact-details {
+    gap: 20px;
+  }
+}

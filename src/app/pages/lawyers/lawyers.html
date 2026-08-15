@@ -1,0 +1,64 @@
+<main class="lawyers-page">
+  <section class="lawyers-hero">
+    <div class="container">
+      <span class="section-label">NOSSA EQUIPE</span>
+
+      <h1>Profissionais preparados para defender seus interesses</h1>
+
+      <p>
+        Conheça nossa equipe de profissionais e conte com uma atuação jurídica
+        baseada em experiência, ética e dedicação.
+      </p>
+    </div>
+  </section>
+
+  <section class="lawyers-content">
+    <div class="container">
+      <span class="section-label">PROFISSIONAIS</span>
+
+      <h2>Conheça nossa equipe</h2>
+
+      <p class="section-description">
+        Nossa equipe trabalha de forma próxima aos clientes, buscando
+        compreender cada caso e construir estratégias jurídicas adequadas.
+      </p>
+
+      <div class="lawyers-grid">
+        <app-lawyer-card
+          name="Dr. João Araujo"
+          role="Advogado"
+          description="Atuação jurídica com experiência, ética e dedicação na defesa dos interesses de seus clientes."
+          link="/agendamento"
+        />
+
+        <app-lawyer-card
+          name="Dra. Maria Freitas"
+          role="Advogada"
+          description="Atuação estratégica e personalizada na busca pelas melhores soluções jurídicas."
+          link="/agendamento"
+        />
+
+        <app-lawyer-card
+          name="Dr. Silva"
+          role="Advogado"
+          description="Atuação profissional voltada à construção de soluções jurídicas eficientes."
+          link="/agendamento"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="lawyers-cta">
+    <div class="container">
+      <h2>Precisa falar com um advogado?</h2>
+
+      <p>
+        Agende uma conversa com nossa equipe e apresente sua situação.
+      </p>
+
+      <a routerLink="/agendamento" class="cta-button">
+        Agendar consulta
+      </a>
+    </div>
+  </section>
+</main>

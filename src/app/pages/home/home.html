@@ -1,0 +1,136 @@
+<main class="home">
+  <section class="hero-section">
+    <app-hero></app-hero>
+  </section>
+
+  <section class="about-section">
+    <div class="container">
+      <span class="section-label">ARAUJO & FREITAS ADVOGADOS</span>
+
+      <h2>Excelência jurídica para proteger seus direitos</h2>
+
+      <p>
+        Atuamos com dedicação, ética e experiência para oferecer soluções
+        jurídicas personalizadas para nossos clientes.
+      </p>
+
+      <a routerLink="/sobre" class="section-link">
+        Conheça nosso escritório
+      </a>
+    </div>
+  </section>
+
+  <section class="areas-section">
+    <div class="container">
+      <span class="section-label">ÁREAS DE ATUAÇÃO</span>
+
+      <h2>Como podemos ajudar</h2>
+
+      <p class="section-description">
+        Conte com nossa experiência para encontrar a melhor solução jurídica
+        para o seu caso.
+      </p>
+
+      <div class="cards-grid">
+        <app-area-card
+          title="Direito Civil"
+          description="Atuação em relações e conflitos de natureza civil."
+          icon="⚖"
+          link="/areas"
+        />
+
+        <app-area-card
+          title="Direito Trabalhista"
+          description="Assessoria jurídica em questões relacionadas às relações de trabalho."
+          icon="💼"
+          link="/areas"
+        />
+
+        <app-area-card
+          title="Direito Empresarial"
+          description="Soluções jurídicas para empresas e negócios."
+          icon="🏢"
+          link="/areas"
+        />
+      </div>
+
+      <a routerLink="/areas" class="section-link">
+        Ver todas as áreas
+      </a>
+    </div>
+  </section>
+
+  <section class="lawyers-section">
+    <div class="container">
+      <span class="section-label">NOSSA EQUIPE</span>
+
+      <h2>Profissionais preparados para defender seus interesses</h2>
+
+      <div class="cards-grid">
+        <app-lawyer-card
+          name="Dr. João Araujo"
+          role="Advogado"
+          description="Atuação jurídica com experiência, ética e dedicação na defesa dos interesses de seus clientes."
+          link="/advogados"
+        />
+
+        <app-lawyer-card
+          name="Dra. Maria Freitas"
+          role="Advogada"
+          description="Atuação estratégica e personalizada na busca pelas melhores soluções jurídicas."
+          link="/advogados"
+        />
+
+        <app-lawyer-card
+          name="Dr. Silva"
+          role="Advogado"
+          description="Atuação profissional voltada à construção de soluções jurídicas eficientes."
+          link="/advogados"
+        />
+      </div>
+
+      <a routerLink="/advogados" class="section-link">
+        Conheça nossa equipe
+      </a>
+    </div>
+  </section>
+
+  <section class="testimonial-section">
+    <div class="container">
+      <span class="section-label">DEPOIMENTOS</span>
+
+      <h2>O que nossos clientes dizem</h2>
+
+      <div class="cards-grid">
+        <app-testimonial-card
+          name="Carlos Oliveira"
+          text="Excelente atendimento e muita atenção durante todo o processo."
+        />
+
+        <app-testimonial-card
+          name="Fernanda Santos"
+          text="Profissionais muito competentes e sempre disponíveis para esclarecer nossas dúvidas."
+        />
+
+        <app-testimonial-card
+          name="Marcos Almeida"
+          text="Fui muito bem orientado e tive todo o suporte necessário."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Precisa de orientação jurídica?</h2>
+
+      <p>
+        Entre em contato conosco e agende uma conversa com nossa equipe.
+      </p>
+
+      <a routerLink="/agendamento" class="cta-button">
+        Agendar consulta
+      </a>
+    </div>
+  </section>
+</main>

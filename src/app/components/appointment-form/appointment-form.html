@@ -1,0 +1,177 @@
+<form
+  class="appointment-form"
+  [formGroup]="appointmentForm"
+  (ngSubmit)="submit()"
+>
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="name">Nome completo</label>
+
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Digite seu nome completo"
+        [class.invalid]="isInvalid('name')"
+      />
+
+      @if (isInvalid('name')) {
+        <span class="error-message">
+          Informe seu nome completo.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="seuemail@exemplo.com"
+        [class.invalid]="isInvalid('email')"
+      />
+
+      @if (isInvalid('email')) {
+        <span class="error-message">
+          Informe um e-mail válido.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefone</label>
+
+      <input
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="(00) 00000-0000"
+        [class.invalid]="isInvalid('phone')"
+      />
+
+      @if (isInvalid('phone')) {
+        <span class="error-message">
+          Informe um telefone válido.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="area">Área jurídica</label>
+
+      <select
+        id="area"
+        formControlName="area"
+        [class.invalid]="isInvalid('area')"
+      >
+        <option value="">Selecione uma área</option>
+        <option value="Direito Civil">Direito Civil</option>
+        <option value="Direito Trabalhista">Direito Trabalhista</option>
+        <option value="Direito Empresarial">Direito Empresarial</option>
+        <option value="Direito de Família">Direito de Família</option>
+        <option value="Direito do Consumidor">Direito do Consumidor</option>
+        <option value="Direito Previdenciário">Direito Previdenciário</option>
+        <option value="Direito Tributário">Direito Tributário</option>
+        <option value="Direito Imobiliário">Direito Imobiliário</option>
+        <option value="Direito Contratual">Direito Contratual</option>
+        <option value="Direito Societário">Direito Societário</option>
+        <option value="Direito Penal">Direito Penal</option>
+      </select>
+
+      @if (isInvalid('area')) {
+        <span class="error-message">
+          Selecione uma área jurídica.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="date">Data desejada</label>
+
+      <input
+        id="date"
+        type="date"
+        formControlName="date"
+        [min]="minDate"
+        [class.invalid]="isInvalid('date')"
+      />
+
+      @if (errorMessage && appointmentForm.controls.date.invalid) {
+        <span class="error-message">
+          {{ errorMessage }}
+        </span>
+      } @else if (isInvalid('date')) {
+        <span class="error-message">
+          Selecione uma data válida de segunda a sexta-feira.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="time">Horário desejado</label>
+
+      <select
+        id="time"
+        formControlName="time"
+        [class.invalid]="isInvalid('time')"
+      >
+        <option value="">Selecione um horário</option>
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="14:00">14:00</option>
+        <option value="15:00">15:00</option>
+        <option value="16:00">16:00</option>
+        <option value="17:00">17:00</option>
+      </select>
+
+      @if (isInvalid('time')) {
+        <span class="error-message">
+          Selecione um horário.
+        </span>
+      }
+    </div>
+
+    <div class="form-group form-group-full">
+      <label for="message">Mensagem</label>
+
+      <textarea
+        id="message"
+        rows="6"
+        formControlName="message"
+        placeholder="Descreva brevemente o motivo do atendimento"
+        [class.invalid]="isInvalid('message')"
+      ></textarea>
+
+      @if (isInvalid('message')) {
+        <span class="error-message">
+          Informe uma mensagem com pelo menos 10 caracteres.
+        </span>
+      }
+    </div>
+
+  </div>
+
+  @if (errorMessage && !appointmentForm.controls.date.invalid) {
+    <div class="form-message form-message-error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="form-message form-message-success">
+      {{ successMessage }}
+    </div>
+  }
+
+  <button
+    type="submit"
+    class="submit-button"
+    [disabled]="appointmentForm.invalid && submitted"
+  >
+    Solicitar agendamento
+  </button>
+</form>
