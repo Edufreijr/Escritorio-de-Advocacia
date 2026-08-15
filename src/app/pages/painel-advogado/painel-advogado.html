@@ -94,7 +94,7 @@
 
       <div class="panel-card">
 
-        @if (appointments().length === 0) {
+        @if (appointments.length === 0) {
 
           <div class="panel-empty">
 
@@ -133,7 +133,7 @@
               <tbody>
 
                 @for (
-                  appointment of appointments();
+                  appointment of appointments;
                   track appointment.id
                 ) {
 
