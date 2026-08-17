@@ -12,6 +12,7 @@ describe('AuthService', () => {
     email: 'admin@araujoefreitas.com.br',
     password: '123456',
     role: 'admin',
+    phone: '123456789',
   };
 
   beforeEach(() => {

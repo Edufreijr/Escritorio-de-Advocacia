@@ -37,6 +37,16 @@ export class AppointmentForm {
   });
 
   constructor() {
+    const user = this.authService.getCurrentUser();
+
+    if (user && user.role === 'user') {
+      this.appointmentForm.patchValue({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      });
+    }
+
     this.appointmentForm.controls.date.valueChanges.subscribe((date) => {
       if (!date) {
         return;
@@ -129,10 +139,9 @@ export class AppointmentForm {
     const appointment: Appointment = {
       id: Date.now(),
       userId: user.id,
-      lawyerId: 2,
       name: user.name,
       email: user.email,
-      phone: formValue.phone ?? '',
+      phone: user.phone,
       area: formValue.area ?? '',
       date: selectedDate,
       time: formValue.time ?? '',
@@ -146,6 +155,13 @@ export class AppointmentForm {
       'Sua solicitação de agendamento foi enviada com sucesso.';
 
     this.appointmentForm.reset();
+
+    this.appointmentForm.patchValue({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+    });
+
     this.submitted = false;
   }
 

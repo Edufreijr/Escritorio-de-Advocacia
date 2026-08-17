@@ -23,28 +23,38 @@
         compreender cada caso e construir estratégias jurídicas adequadas.
       </p>
 
-      <div class="lawyers-grid">
-        <app-lawyer-card
-          name="Dr. João Araujo"
-          role="Advogado"
-          description="Atuação jurídica com experiência, ética e dedicação na defesa dos interesses de seus clientes."
-          link="/agendamento"
-        />
+      @if (lawyers().length === 0) {
 
-        <app-lawyer-card
-          name="Dra. Maria Freitas"
-          role="Advogada"
-          description="Atuação estratégica e personalizada na busca pelas melhores soluções jurídicas."
-          link="/agendamento"
-        />
+        <div class="empty-state">
+          <span class="empty-icon">⚖</span>
 
-        <app-lawyer-card
-          name="Dr. Silva"
-          role="Advogado"
-          description="Atuação profissional voltada à construção de soluções jurídicas eficientes."
-          link="/agendamento"
-        />
-      </div>
+          <h3>Nenhum advogado cadastrado</h3>
+
+          <p>
+            Os advogados cadastrados pelo administrador aparecerão aqui.
+          </p>
+        </div>
+
+      } @else {
+
+        <div class="lawyers-grid">
+
+          @for (lawyer of lawyers(); track lawyer.id) {
+
+            <app-lawyer-card
+              [name]="lawyer.name"
+              [role]="lawyer.role"
+              [description]="lawyer.bio"
+              [specialties]="lawyer.specialties"
+              link="/agendamento"
+            />
+
+          }
+
+        </div>
+
+      }
+
     </div>
   </section>
 

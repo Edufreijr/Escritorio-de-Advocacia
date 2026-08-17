@@ -60,6 +60,7 @@ export class Cadastro {
     const user = this.authService.register(
       name,
       email,
+      phone,
       password,
     );
 
@@ -68,11 +69,6 @@ export class Cadastro {
         'Não foi possível realizar o cadastro.';
       return;
     }
-
-    localStorage.setItem(
-      `araujo-freitas-phone-${user.id}`,
-      phone,
-    );
 
     this.router.navigate(['/agendamento']);
   }

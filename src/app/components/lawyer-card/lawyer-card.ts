@@ -11,5 +11,6 @@ export class LawyerCard {
   name = input.required<string>();
   role = input.required<string>();
   description = input.required<string>();
+  specialties = input<string[]>([]);
   link = input<string>('/advogados');
 }

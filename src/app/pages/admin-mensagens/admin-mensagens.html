@@ -1,0 +1,153 @@
+<section class="admin-page">
+
+  <header class="page-header">
+    <div>
+      <span class="section-label">GESTÃO</span>
+      <h1>Mensagens</h1>
+      <p>Visualize e acompanhe as mensagens enviadas pelos clientes.</p>
+    </div>
+  </header>
+
+  <section class="stats-grid">
+
+    <article class="stat-card">
+      <span class="stat-label">TOTAL</span>
+      <strong>{{ totalContacts }}</strong>
+      <span class="stat-description">Mensagens recebidas</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">NOVAS</span>
+      <strong>{{ newContacts }}</strong>
+      <span class="stat-description">Aguardando leitura</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">LIDAS</span>
+      <strong>{{ readContacts }}</strong>
+      <span class="stat-description">Mensagens visualizadas</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">RESPONDIDAS</span>
+      <strong>{{ answeredContacts }}</strong>
+      <span class="stat-description">Atendimentos concluídos</span>
+    </article>
+
+  </section>
+
+  <section class="content-card">
+
+    <header class="card-header">
+      <div>
+        <span class="card-label">CONTATO</span>
+        <h2>Mensagens recebidas</h2>
+      </div>
+    </header>
+
+    @if (contacts().length === 0) {
+
+      <div class="empty-state">
+        <span class="empty-icon">✉</span>
+        <h3>Nenhuma mensagem encontrada</h3>
+        <p>
+          As mensagens enviadas pelo formulário de contato aparecerão aqui.
+        </p>
+      </div>
+
+    } @else {
+
+      <div class="table-wrapper">
+
+        <table class="admin-table">
+
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Contato</th>
+              <th>Assunto</th>
+              <th>Mensagem</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (contact of contacts(); track contact.id) {
+
+              <tr>
+
+                <td>
+                  <div class="client-info">
+                    <strong>{{ contact.name }}</strong>
+                    <span>ID #{{ contact.id }}</span>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="contact-info">
+                    <span>{{ contact.email }}</span>
+                    <span>{{ contact.phone }}</span>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="subject-badge">
+                    {{ contact.subject }}
+                  </span>
+                </td>
+
+                <td>
+                  <p class="message">
+                    {{ contact.message }}
+                  </p>
+                </td>
+
+                <td>
+                  {{ contact.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </td>
+
+                <td>
+                  <span
+                    class="status"
+                    [class.pending]="contact.status === 'new'"
+                    [class.read]="contact.status === 'read'"
+                    [class.confirmed]="contact.status === 'answered'"
+                  >
+                    {{
+                      contact.status === 'new'
+                        ? 'Nova'
+                        : contact.status === 'read'
+                          ? 'Lida'
+                          : 'Respondida'
+                    }}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    type="button"
+                    class="delete-button"
+                    (click)="removeContact(contact.id)"
+                  >
+                    Excluir
+                  </button>
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

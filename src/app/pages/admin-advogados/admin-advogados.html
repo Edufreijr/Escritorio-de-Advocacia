@@ -1,0 +1,662 @@
+<section class="admin-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="section-label">
+        GESTÃO
+      </span>
+
+      <h1>
+        Advogados
+      </h1>
+
+      <p>
+        Gerencie os profissionais que fazem parte do escritório.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="openForm()"
+    >
+      + Novo advogado
+    </button>
+
+  </header>
+
+  <section class="stats-grid">
+
+    <article class="stat-card">
+
+      <span class="stat-label">
+        TOTAL
+      </span>
+
+      <strong>
+        {{ totalLawyers }}
+      </strong>
+
+      <span class="stat-description">
+        Advogados cadastrados
+      </span>
+
+    </article>
+
+    <article class="stat-card">
+
+      <span class="stat-label">
+        ATIVOS
+      </span>
+
+      <strong>
+        {{ totalLawyers }}
+      </strong>
+
+      <span class="stat-description">
+        Profissionais disponíveis
+      </span>
+
+    </article>
+
+    <article class="stat-card">
+
+      <span class="stat-label">
+        ÁREAS
+      </span>
+
+      <strong>
+        {{ areasCount }}
+      </strong>
+
+      <span class="stat-description">
+        Áreas de atuação
+      </span>
+
+    </article>
+
+    <article class="stat-card">
+
+      <span class="stat-label">
+        CADASTRADOS
+      </span>
+
+      <strong>
+        {{ totalLawyers }}
+      </strong>
+
+      <span class="stat-description">
+        Profissionais na plataforma
+      </span>
+
+    </article>
+
+  </section>
+
+  @if (showForm) {
+
+    <section class="content-card form-card">
+
+      <header class="card-header">
+
+        <div>
+
+          <span class="card-label">
+            {{
+              editingLawyerId !== null
+                ? 'EDIÇÃO'
+                : 'NOVO CADASTRO'
+            }}
+          </span>
+
+          <h2>
+            {{
+              editingLawyerId !== null
+                ? 'Editar advogado'
+                : 'Cadastrar advogado'
+            }}
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          aria-label="Fechar formulário"
+          (click)="closeForm()"
+        >
+          ×
+        </button>
+
+      </header>
+
+      <form
+        class="lawyer-form"
+        (ngSubmit)="createLawyer()"
+      >
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label for="name">
+              Nome completo
+            </label>
+
+            <input
+              id="name"
+              name="name"
+              type="text"
+              [(ngModel)]="name"
+              placeholder="Nome do advogado"
+              autocomplete="name"
+              required
+            />
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="role">
+              Cargo
+            </label>
+
+            <input
+              id="role"
+              name="role"
+              type="text"
+              [(ngModel)]="role"
+              placeholder="Advogado(a) Associado(a)"
+              required
+            />
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="oab">
+              OAB
+            </label>
+
+            <input
+              id="oab"
+              name="oab"
+              type="text"
+              [(ngModel)]="oab"
+              placeholder="OAB/UF 000000"
+              required
+            />
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              Foto do advogado
+            </label>
+
+            <div
+              class="image-dropzone"
+              [class.has-image]="image"
+              (dragover)="handleDragOver($event)"
+              (dragleave)="handleDragLeave($event)"
+              (drop)="handleImageDrop($event)"
+              (click)="imageInput.click()"
+            >
+
+              @if (image) {
+
+                <div class="image-preview">
+
+                  <img
+                    [src]="image"
+                    [alt]="'Foto de ' + (name || 'advogado')"
+                  />
+
+                  <div class="image-preview-info">
+
+                    <strong>
+                      Foto selecionada
+                    </strong>
+
+                    <span>
+                      Clique ou arraste outra imagem para substituir
+                    </span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="remove-image-button"
+                    (click)="removeImage(); $event.stopPropagation()"
+                  >
+                    Remover
+                  </button>
+
+                </div>
+
+              } @else {
+
+                <div class="dropzone-content">
+
+                  <span class="dropzone-icon">
+                    ↑
+                  </span>
+
+                  <strong>
+                    Arraste uma imagem aqui
+                  </strong>
+
+                  <span>
+                    ou clique para selecionar
+                  </span>
+
+                  <small>
+                    JPG, JPEG, PNG ou WEBP · máximo 5 MB
+                  </small>
+
+                </div>
+
+              }
+
+              <input
+                #imageInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="hidden-file-input"
+                (change)="handleImageSelect($event)"
+                (click)="$event.stopPropagation()"
+              />
+
+            </div>
+
+          </div>
+
+          <div class="form-group form-group-full">
+
+            <label>
+              Áreas de atuação
+            </label>
+
+            <div class="area-picker">
+
+              <button
+                type="button"
+                class="area-picker-button"
+                [class.open]="areaMenuOpen"
+                (click)="toggleAreaMenu()"
+              >
+
+                <span class="area-picker-text">
+
+                  @if (selectedAreas.length === 0) {
+
+                    Adicionar área de atuação
+
+                  } @else {
+
+                    {{ selectedAreas.length }}
+
+                    {{
+                      selectedAreas.length === 1
+                        ? 'área selecionada'
+                        : 'áreas selecionadas'
+                    }}
+
+                  }
+
+                </span>
+
+                <span class="area-picker-arrow">
+                  {{ areaMenuOpen ? '▲' : '▼' }}
+                </span>
+
+              </button>
+
+              @if (areaMenuOpen) {
+
+                <div
+                  class="area-picker-menu"
+                  (click)="$event.stopPropagation()"
+                >
+
+                  <div class="area-picker-menu-header">
+
+                    <div>
+
+                      <strong>
+                        Áreas de atuação
+                      </strong>
+
+                      <span>
+                        Selecione uma ou mais áreas
+                      </span>
+
+                    </div>
+
+                    <span class="area-picker-count">
+                      {{ selectedAreas.length }}
+                    </span>
+
+                  </div>
+
+                  @if (availableAreas.length === 0) {
+
+                    <div class="area-empty">
+                      Nenhuma área de atuação cadastrada.
+                    </div>
+
+                  } @else {
+
+                    <div class="area-options">
+
+                      @for (
+                        area of availableAreas;
+                        track area.id
+                      ) {
+
+                        <button
+                          type="button"
+                          class="area-option"
+                          [class.selected]="
+                            isAreaSelected(area.name)
+                          "
+                          (click)="toggleArea(area.name)"
+                        >
+
+                          <span class="area-checkbox">
+
+                            @if (
+                              isAreaSelected(area.name)
+                            ) {
+                              ✓
+                            }
+
+                          </span>
+
+                          <span class="area-option-name">
+                            {{ area.name }}
+                          </span>
+
+                          @if (
+                            isAreaSelected(area.name)
+                          ) {
+
+                            <span class="area-option-status">
+                              Selecionada
+                            </span>
+
+                          }
+
+                        </button>
+
+                      }
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+            @if (selectedAreas.length > 0) {
+
+              <div class="selected-areas">
+
+                @for (
+                  area of selectedAreas;
+                  track area
+                ) {
+
+                  <span class="selected-area-tag">
+
+                    <span>
+                      {{ area }}
+                    </span>
+
+                    <button
+                      type="button"
+                      [attr.aria-label]="'Remover ' + area"
+                      (click)="removeSelectedArea(area)"
+                    >
+                      ×
+                    </button>
+
+                  </span>
+
+                }
+
+              </div>
+
+            } @else {
+
+              <small class="selection-warning">
+                Adicione pelo menos uma área de atuação.
+              </small>
+
+            }
+
+          </div>
+
+          <div class="form-group form-group-full">
+
+            <label for="bio">
+              Biografia
+            </label>
+
+            <textarea
+              id="bio"
+              name="bio"
+              [(ngModel)]="bio"
+              placeholder="Descreva a atuação profissional do advogado."
+              rows="5"
+              required
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="closeForm()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="
+              !name.trim() ||
+              !role.trim() ||
+              !oab.trim() ||
+              !bio.trim() ||
+              selectedAreas.length === 0
+            "
+          >
+            {{
+              editingLawyerId !== null
+                ? 'Salvar alterações'
+                : 'Cadastrar advogado'
+            }}
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  }
+
+  <section class="content-card">
+
+    <header class="card-header">
+
+      <div>
+
+        <span class="card-label">
+          EQUIPE
+        </span>
+
+        <h2>
+          Advogados cadastrados
+        </h2>
+
+      </div>
+
+    </header>
+
+    @if (lawyers().length === 0) {
+
+      <div class="empty-state">
+
+        <span class="empty-icon">
+          ⚖
+        </span>
+
+        <h3>
+          Nenhum advogado encontrado
+        </h3>
+
+        <p>
+          Os profissionais cadastrados aparecerão nesta área.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div class="lawyers-grid">
+
+        @for (
+          lawyer of lawyers();
+          track lawyer.id
+        ) {
+
+          <article class="lawyer-card">
+
+            <div class="lawyer-card-header">
+
+              <div class="lawyer-avatar">
+
+                @if (lawyer.image) {
+
+                  <img
+                    [src]="lawyer.image"
+                    [alt]="'Foto de ' + lawyer.name"
+                    (error)="handleImageError($event)"
+                  />
+
+                } @else {
+
+                  {{
+                    lawyer.name
+                      .charAt(0)
+                      .toUpperCase()
+                  }}
+
+                }
+
+              </div>
+
+              <span class="status active">
+                Ativo
+              </span>
+
+            </div>
+
+            <div class="lawyer-info">
+
+              <span class="lawyer-label">
+                {{ lawyer.role }}
+              </span>
+
+              <h3>
+                {{ lawyer.name }}
+              </h3>
+
+              <p class="oab">
+                OAB: {{ lawyer.oab }}
+              </p>
+
+            </div>
+
+            <div class="lawyer-details">
+
+              <div class="detail-item">
+
+                <span class="detail-label">
+                  ESPECIALIDADES
+                </span>
+
+                <div class="specialties">
+
+                  @for (
+                    specialty of lawyer.specialties;
+                    track specialty
+                  ) {
+
+                    <span class="specialty-tag">
+                      {{ specialty }}
+                    </span>
+
+                  }
+
+                </div>
+
+              </div>
+
+              <div class="detail-item">
+
+                <span class="detail-label">
+                  BIOGRAFIA
+                </span>
+
+                <span class="lawyer-bio">
+                  {{ lawyer.bio }}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="lawyer-card-actions">
+
+              <button
+                type="button"
+                class="edit-button"
+                (click)="editLawyer(lawyer)"
+              >
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="delete-button"
+                (click)="removeLawyer(lawyer.id)"
+              >
+                Remover
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

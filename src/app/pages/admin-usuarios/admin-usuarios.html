@@ -1,0 +1,167 @@
+<section class="admin-page">
+
+  <header class="page-header">
+    <div>
+      <span class="section-label">GESTÃO</span>
+      <h1>Usuários</h1>
+      <p>Gerencie os usuários cadastrados na plataforma.</p>
+    </div>
+  </header>
+
+  <section class="stats-grid">
+
+    <article class="stat-card">
+      <span class="stat-label">TOTAL</span>
+      <strong>{{ totalUsers }}</strong>
+      <span class="stat-description">Usuários cadastrados</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">CLIENTES</span>
+      <strong>{{ clientsCount }}</strong>
+      <span class="stat-description">Clientes cadastrados</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">ADVOGADOS</span>
+      <strong>{{ lawyersCount }}</strong>
+      <span class="stat-description">Profissionais cadastrados</span>
+    </article>
+
+    <article class="stat-card">
+      <span class="stat-label">ADMINISTRADORES</span>
+      <strong>{{ adminsCount }}</strong>
+      <span class="stat-description">Administradores do sistema</span>
+    </article>
+
+  </section>
+
+  <section class="content-card">
+
+    <header class="card-header">
+      <div>
+        <span class="card-label">USUÁRIOS</span>
+        <h2>Todos os usuários</h2>
+      </div>
+    </header>
+
+    @if (users.length === 0) {
+
+      <div class="empty-state">
+        <span class="empty-icon">◉</span>
+        <h3>Nenhum usuário encontrado</h3>
+        <p>Os usuários cadastrados aparecerão nesta área.</p>
+      </div>
+
+    } @else {
+
+      <div class="table-wrapper">
+
+        <table class="admin-table">
+
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Perfil</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (user of users; track user.id) {
+
+              <tr>
+
+                <td>
+                  <div class="user-info">
+
+                    <div class="user-avatar">
+                      {{ user.name.charAt(0).toUpperCase() }}
+                    </div>
+
+                    <div class="user-details">
+                      <strong>{{ user.name }}</strong>
+                      <span>ID #{{ user.id }}</span>
+                    </div>
+
+                  </div>
+                </td>
+
+                <td>
+                  <span class="contact-text">
+                    {{ user.email }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="contact-text">
+                    {{ user.phone || 'Não informado' }}
+                  </span>
+                </td>
+
+                <td>
+
+                  <span
+                    class="role-badge"
+                    [class.client]="user.role === 'user'"
+                    [class.lawyer]="user.role === 'lawyer'"
+                    [class.admin]="user.role === 'admin'"
+                  >
+                    {{
+                      user.role === 'admin'
+                        ? 'Administrador'
+                        : user.role === 'lawyer'
+                          ? 'Advogado'
+                          : 'Cliente'
+                    }}
+                  </span>
+
+                </td>
+
+                <td>
+                  <span class="status active">
+                    Ativo
+                  </span>
+                </td>
+
+                <td>
+
+                  @if (user.role !== 'admin') {
+
+                    <button
+                      type="button"
+                      class="delete-button"
+                      (click)="removeUser(user.id)"
+                    >
+                      Excluir
+                    </button>
+
+                  } @else {
+
+                    <span class="contact-text">
+                      Protegido
+                    </span>
+
+                  }
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>
