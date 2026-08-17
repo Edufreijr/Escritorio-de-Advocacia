@@ -243,7 +243,28 @@
   color: #64748b;
   line-height: 1.7;
 }
+.appointment-lawyer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px solid #eadfce;
+  border-radius: 8px;
+  background: #fffcf7;
+}
 
+.appointment-lawyer span {
+  color: #9a7a4a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.appointment-lawyer strong {
+  color: #1f2937;
+  font-size: 0.95rem;
+}
 .account-footer-action {
   display: flex;
   justify-content: flex-end;

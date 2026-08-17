@@ -1,12 +1,7 @@
-<form
-  class="appointment-form"
-  [formGroup]="appointmentForm"
-  (ngSubmit)="submit()"
->
+<form class="appointment-form" [formGroup]="appointmentForm" (ngSubmit)="submit()">
   <div class="form-grid">
-
     <div class="form-group">
-      <label for="name">Nome completo</label>
+      <label for="name"> Nome completo </label>
 
       <input
         id="name"
@@ -17,14 +12,12 @@
       />
 
       @if (isInvalid('name')) {
-        <span class="error-message">
-          Informe seu nome completo.
-        </span>
+        <span class="error-message"> Informe seu nome completo. </span>
       }
     </div>
 
     <div class="form-group">
-      <label for="email">E-mail</label>
+      <label for="email"> E-mail </label>
 
       <input
         id="email"
@@ -35,14 +28,12 @@
       />
 
       @if (isInvalid('email')) {
-        <span class="error-message">
-          Informe um e-mail válido.
-        </span>
+        <span class="error-message"> Informe um e-mail válido. </span>
       }
     </div>
 
     <div class="form-group">
-      <label for="phone">Telefone</label>
+      <label for="phone"> Telefone </label>
 
       <input
         id="phone"
@@ -53,40 +44,101 @@
       />
 
       @if (isInvalid('phone')) {
-        <span class="error-message">
-          Informe um telefone válido.
-        </span>
+        <span class="error-message"> Informe um telefone válido. </span>
       }
     </div>
 
     <div class="form-group">
-      <label for="area">Área jurídica</label>
+      <label for="area"> Área jurídica </label>
 
-      <select
-        id="area"
-        formControlName="area"
-        [class.invalid]="isInvalid('area')"
-      >
+      <select id="area" formControlName="area" [class.invalid]="isInvalid('area')">
         <option value="">Selecione uma área</option>
+
         <option value="Direito Civil">Direito Civil</option>
+
         <option value="Direito Trabalhista">Direito Trabalhista</option>
+
         <option value="Direito Empresarial">Direito Empresarial</option>
+
         <option value="Direito de Família">Direito de Família</option>
+
         <option value="Direito do Consumidor">Direito do Consumidor</option>
+
         <option value="Direito Previdenciário">Direito Previdenciário</option>
+
         <option value="Direito Tributário">Direito Tributário</option>
+
         <option value="Direito Criminal">Criminal</option>
       </select>
 
       @if (isInvalid('area')) {
-        <span class="error-message">
-          Selecione uma área jurídica.
-        </span>
+        <span class="error-message"> Selecione uma área jurídica. </span>
       }
     </div>
 
+    <div class="form-group form-group-full">
+      <span class="form-label"> Como deseja escolher o advogado? </span>
+
+      <div class="lawyer-choice">
+        <label
+          class="lawyer-choice-option"
+          [class.selected]="appointmentForm.controls.lawyerChoice.value === 'office'"
+        >
+          <input type="radio" formControlName="lawyerChoice" value="office" />
+
+          <span class="lawyer-choice-content">
+            <strong> Quero que o escritório indique </strong>
+
+            <small> Nossa equipe escolherá um profissional adequado à área do seu caso. </small>
+          </span>
+        </label>
+
+        <label
+          class="lawyer-choice-option"
+          [class.selected]="appointmentForm.controls.lawyerChoice.value === 'specific'"
+        >
+          <input type="radio" formControlName="lawyerChoice" value="specific" />
+
+          <span class="lawyer-choice-content">
+            <strong> Quero escolher um advogado </strong>
+
+            <small> Selecione um profissional disponível para a área jurídica escolhida. </small>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    @if (wantsSpecificLawyer) {
+      <div class="form-group form-group-full">
+        <label for="lawyerId"> Advogado </label>
+
+        <select id="lawyerId" formControlName="lawyerId" [class.invalid]="isInvalid('lawyerId')">
+          <option value="">Selecione um advogado</option>
+
+          @for (lawyer of filteredLawyers; track lawyer.id) {
+            <option [value]="lawyer.id">
+              {{ lawyer.name }}
+              —
+              {{ lawyer.role }}
+            </option>
+          }
+        </select>
+
+        @if (filteredLawyers.length === 0 && appointmentForm.controls.area.value) {
+          <span class="error-message">
+            Não encontramos um advogado cadastrado para esta área. Escolha a opção para o escritório
+            indicar um profissional.
+          </span>
+        }
+
+        @if (isInvalid('lawyerId')) {
+          <span class="error-message"> Selecione um advogado. </span>
+        }
+      </div>
+    }
+
     <div class="form-group">
-      <label for="date">Data desejada</label>
+      <label for="date"> Data desejada </label>
 
       <input
         id="date"
@@ -101,39 +153,38 @@
           {{ errorMessage }}
         </span>
       } @else if (isInvalid('date')) {
-        <span class="error-message">
-          Selecione uma data válida de segunda a sexta-feira.
-        </span>
+        <span class="error-message"> Selecione uma data válida de segunda a sexta-feira. </span>
       }
     </div>
 
     <div class="form-group">
-      <label for="time">Horário desejado</label>
+      <label for="time"> Horário desejado </label>
 
-      <select
-        id="time"
-        formControlName="time"
-        [class.invalid]="isInvalid('time')"
-      >
+      <select id="time" formControlName="time" [class.invalid]="isInvalid('time')">
         <option value="">Selecione um horário</option>
+
         <option value="09:00">09:00</option>
+
         <option value="10:00">10:00</option>
+
         <option value="11:00">11:00</option>
+
         <option value="14:00">14:00</option>
+
         <option value="15:00">15:00</option>
+
         <option value="16:00">16:00</option>
+
         <option value="17:00">17:00</option>
       </select>
 
       @if (isInvalid('time')) {
-        <span class="error-message">
-          Selecione um horário.
-        </span>
+        <span class="error-message"> Selecione um horário. </span>
       }
     </div>
 
     <div class="form-group form-group-full">
-      <label for="message">Mensagem</label>
+      <label for="message"> Mensagem </label>
 
       <textarea
         id="message"
@@ -144,12 +195,9 @@
       ></textarea>
 
       @if (isInvalid('message')) {
-        <span class="error-message">
-          Informe uma mensagem com pelo menos 10 caracteres.
-        </span>
+        <span class="error-message"> Informe uma mensagem com pelo menos 10 caracteres. </span>
       }
     </div>
-
   </div>
 
   @if (errorMessage && !appointmentForm.controls.date.invalid) {
@@ -164,11 +212,7 @@
     </div>
   }
 
-  <button
-    type="submit"
-    class="submit-button"
-    [disabled]="appointmentForm.invalid && submitted"
-  >
-    Solicitar agendamento
+  <button type="submit" class="submit-button" [disabled]="appointmentForm.invalid && submitted">
+    Solicitar atendimento
   </button>
 </form>

@@ -2,6 +2,7 @@ export interface Appointment {
   id: number;
   userId: number;
   lawyerId?: number;
+
   name: string;
   email: string;
   phone: string;
@@ -9,5 +10,6 @@ export interface Appointment {
   date: string;
   time: string;
   message: string;
+
   status: 'pending' | 'confirmed' | 'cancelled';
 }

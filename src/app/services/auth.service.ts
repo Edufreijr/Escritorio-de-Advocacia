@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
 import { AppointmentService } from './appointment.service';
 import { ContactService } from './contact.service';
@@ -10,27 +10,26 @@ import { generateSeedData } from '../data/seed.data';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly appointmentService = inject(AppointmentService);
+
+  private readonly contactService = inject(ContactService);
+
   private readonly storageKey = 'araujo-freitas-user';
+
   private readonly usersStorageKey = 'araujo-freitas-users';
 
-  private readonly currentUser = signal<User | null>(
-    this.loadUser(),
-  );
+  private readonly lawyerEmailDomain = '@araujoefreitas.com';
+
+  private readonly lawyerDefaultPassword = '123456';
+
+  private readonly currentUser = signal<User | null>(this.loadUser());
 
   readonly user = this.currentUser.asReadonly();
-
-  constructor(
-    private readonly appointmentService: AppointmentService,
-    private readonly contactService: ContactService,
-  ) {}
 
   login(user: User): void {
     this.currentUser.set(user);
 
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(user),
-    );
+    localStorage.setItem(this.storageKey, JSON.stringify(user));
   }
 
   logout(): void {
@@ -39,18 +38,11 @@ export class AuthService {
     localStorage.removeItem(this.storageKey);
   }
 
-  register(
-    name: string,
-    email: string,
-    phone: string,
-    password: string,
-  ): User | null {
+  register(name: string, email: string, phone: string, password: string): User | null {
     const users = this.getUsers();
 
     const emailAlreadyExists = users.some(
-      (user) =>
-        user.email.toLowerCase() ===
-        email.toLowerCase(),
+      (user) => user.email.toLowerCase() === email.toLowerCase(),
     );
 
     if (emailAlreadyExists) {
@@ -69,17 +61,101 @@ export class AuthService {
     users.push(user);
 
     this.saveUsers(users);
+
     this.login(user);
 
     return user;
   }
 
-  isEmailRegistered(email: string): boolean {
-    return this.getUsers().some(
-      (user) =>
-        user.email.toLowerCase() ===
-        email.toLowerCase(),
+  createLawyerAccount(lawyerId: number, name: string): User | null {
+    const users = this.getUsers();
+
+    const existingById = users.find((user) => user.id === lawyerId && user.role === 'lawyer');
+
+    if (existingById) {
+      const updatedUser: User = {
+        ...existingById,
+        name,
+      };
+
+      const updatedUsers = users.map((user) =>
+        user.id === lawyerId && user.role === 'lawyer' ? updatedUser : user,
+      );
+
+      this.saveUsers(updatedUsers);
+
+      return updatedUser;
+    }
+
+    const email = `advogado${lawyerId}${this.lawyerEmailDomain}`;
+
+    const emailAlreadyExists = users.some(
+      (user) => user.email.toLowerCase() === email.toLowerCase(),
     );
+
+    if (emailAlreadyExists) {
+      return null;
+    }
+
+    const lawyerUser: User = {
+      id: lawyerId,
+      name,
+      email,
+      phone: '',
+      password: this.lawyerDefaultPassword,
+      role: 'lawyer',
+    };
+
+    this.saveUsers([...users, lawyerUser]);
+
+    return lawyerUser;
+  }
+
+  updateLawyerAccount(lawyerId: number, name: string): User | null {
+    const users = this.getUsers();
+
+    const lawyerUser = users.find((user) => user.id === lawyerId && user.role === 'lawyer');
+
+    if (!lawyerUser) {
+      return this.createLawyerAccount(lawyerId, name);
+    }
+
+    const updatedUser: User = {
+      ...lawyerUser,
+      name,
+    };
+
+    this.saveUsers(
+      users.map((user) => (user.id === lawyerId && user.role === 'lawyer' ? updatedUser : user)),
+    );
+
+    if (this.currentUser()?.id === lawyerId && this.currentUser()?.role === 'lawyer') {
+      this.login(updatedUser);
+    }
+
+    return updatedUser;
+  }
+
+  removeLawyerAccount(lawyerId: number): boolean {
+    const users = this.getUsers();
+
+    const lawyer = users.find((user) => user.id === lawyerId && user.role === 'lawyer');
+
+    if (!lawyer) {
+      return false;
+    }
+
+    this.saveUsers(users.filter((user) => !(user.id === lawyerId && user.role === 'lawyer')));
+
+    if (this.currentUser()?.id === lawyerId && this.currentUser()?.role === 'lawyer') {
+      this.logout();
+    }
+
+    return true;
+  }
+
+  isEmailRegistered(email: string): boolean {
+    return this.getUsers().some((user) => user.email.toLowerCase() === email.toLowerCase());
   }
 
   isLoggedIn(): boolean {
@@ -96,21 +172,19 @@ export class AuthService {
 
   getUsers(): User[] {
     const seedData = generateSeedData();
-    const storedUsers = localStorage.getItem(
-      this.usersStorageKey,
-    );
+
+    const storedUsers = localStorage.getItem(this.usersStorageKey);
 
     const seedUsers: User[] = seedData.users;
 
-    const seedLawyerUsers: User[] =
-      seedData.lawyers.map((lawyer) => ({
-        id: lawyer.id,
-        name: lawyer.name,
-        email: `advogado${lawyer.id}@araujoefreitas.com`,
-        phone: '',
-        password: '123456',
-        role: 'lawyer',
-      }));
+    const seedLawyerUsers: User[] = seedData.lawyers.map((lawyer) => ({
+      id: lawyer.id,
+      name: lawyer.name,
+      email: `advogado${lawyer.id}${this.lawyerEmailDomain}`,
+      phone: '',
+      password: this.lawyerDefaultPassword,
+      role: 'lawyer',
+    }));
 
     const adminUser: User = {
       id: 1,
@@ -121,22 +195,8 @@ export class AuthService {
       role: 'admin',
     };
 
-    const seedUsersMap = new Map<number, User>();
-
-    seedUsersMap.set(adminUser.id, adminUser);
-
-    seedUsers.forEach((user) => {
-      seedUsersMap.set(user.id, user);
-    });
-
-    seedLawyerUsers.forEach((user) => {
-      seedUsersMap.set(user.id, user);
-    });
-
     if (!storedUsers) {
-      const users = Array.from(
-        seedUsersMap.values(),
-      );
+      const users = [adminUser, ...seedUsers, ...seedLawyerUsers];
 
       this.saveUsers(users);
 
@@ -147,16 +207,10 @@ export class AuthService {
       const parsedUsers = JSON.parse(storedUsers);
 
       if (!Array.isArray(parsedUsers)) {
-        const users = Array.from(
-          seedUsersMap.values(),
-        );
-
-        this.saveUsers(users);
-
-        return users;
+        throw new Error('Invalid users storage');
       }
 
-      const customUsers = parsedUsers
+      const users = parsedUsers
         .filter(
           (user): user is User =>
             !!user &&
@@ -165,26 +219,15 @@ export class AuthService {
             typeof user.email === 'string' &&
             typeof user.phone === 'string' &&
             typeof user.password === 'string' &&
-            ['user', 'lawyer', 'admin'].includes(
-              user.role,
-            ),
+            ['user', 'lawyer', 'admin'].includes(user.role),
         )
-        .filter(
-          (user) =>
-            user.id !== 2 &&
-            user.email !==
-              'advogado@araujoefreitas.com',
-        );
+        .filter((user) => user.id !== 2 && user.email !== 'advogado@araujoefreitas.com');
 
-      customUsers.forEach((user) => {
-        if (!seedUsersMap.has(user.id)) {
-          seedUsersMap.set(user.id, user);
-        }
-      });
+      const hasAdmin = users.some((user) => user.id === 1 && user.role === 'admin');
 
-      const users = Array.from(
-        seedUsersMap.values(),
-      );
+      if (!hasAdmin) {
+        users.unshift(adminUser);
+      }
 
       this.saveUsers(users);
 
@@ -192,9 +235,7 @@ export class AuthService {
     } catch {
       localStorage.removeItem(this.usersStorageKey);
 
-      const users = Array.from(
-        seedUsersMap.values(),
-      );
+      const users = [adminUser, ...seedUsers, ...seedLawyerUsers];
 
       this.saveUsers(users);
 
@@ -205,33 +246,25 @@ export class AuthService {
   removeUser(id: number): boolean {
     const users = this.getUsers();
 
-    const user = users.find(
-      (item) => item.id === id,
-    );
+    const user = users.find((item) => item.id === id);
 
     if (!user) {
       return false;
     }
 
-    if (
-      user.id === 1 ||
-      user.email === 'admin@araujoefreitas.com'
-    ) {
+    if (user.id === 1 || user.email === 'admin@araujoefreitas.com') {
       return false;
     }
 
-    const updatedUsers = users.filter(
-      (item) => item.id !== id,
-    );
+    const updatedUsers = users.filter((item) => item.id !== id);
 
     this.saveUsers(updatedUsers);
 
     this.appointmentService.removeByUserId(user.id);
+
     this.contactService.removeByEmail(user.email);
 
-    const currentUser = this.getCurrentUser();
-
-    if (currentUser?.id === id) {
+    if (this.currentUser()?.id === id) {
       this.logout();
     }
 
@@ -239,20 +272,12 @@ export class AuthService {
   }
 
   getLawyers(): User[] {
-    return this.getUsers().filter(
-      (user) => user.role === 'lawyer',
-    );
+    return this.getUsers().filter((user) => user.role === 'lawyer');
   }
 
-  authenticate(
-    email: string,
-    password: string,
-  ): User | null {
+  authenticate(email: string, password: string): User | null {
     const user = this.getUsers().find(
-      (item) =>
-        item.email.toLowerCase() ===
-          email.toLowerCase() &&
-        item.password === password,
+      (item) => item.email.toLowerCase() === email.toLowerCase() && item.password === password,
     );
 
     if (!user) {
@@ -265,25 +290,18 @@ export class AuthService {
   }
 
   private saveUsers(users: User[]): void {
-    localStorage.setItem(
-      this.usersStorageKey,
-      JSON.stringify(users),
-    );
+    localStorage.setItem(this.usersStorageKey, JSON.stringify(users));
   }
 
   private loadUser(): User | null {
-    const storedUser = localStorage.getItem(
-      this.storageKey,
-    );
+    const storedUser = localStorage.getItem(this.storageKey);
 
     if (!storedUser) {
       return null;
     }
 
     try {
-      const user = JSON.parse(
-        storedUser,
-      ) as User;
+      const user = JSON.parse(storedUser) as User;
 
       if (
         !user ||
@@ -292,20 +310,14 @@ export class AuthService {
         typeof user.email !== 'string' ||
         typeof user.phone !== 'string' ||
         typeof user.password !== 'string' ||
-        !['user', 'lawyer', 'admin'].includes(
-          user.role,
-        )
+        !['user', 'lawyer', 'admin'].includes(user.role)
       ) {
         localStorage.removeItem(this.storageKey);
 
         return null;
       }
 
-      if (
-        user.id === 2 ||
-        user.email ===
-          'advogado@araujoefreitas.com'
-      ) {
+      if (user.id === 2 || user.email === 'advogado@araujoefreitas.com') {
         localStorage.removeItem(this.storageKey);
 
         return null;

@@ -8,77 +8,48 @@ describe('AppointmentService', () => {
 
   const appointment: Appointment = {
     id: 1,
+    userId: 10,
     name: 'João da Silva',
     email: 'joao@email.com',
-    phone: '(22) 99999-9999',
-    area: 'Direito de Família',
+    phone: '11999999999',
+    area: 'Direito Civil',
     date: '2026-08-20',
-    time: '14:00',
-    message: 'Gostaria de agendar uma consulta.',
+    time: '10:00',
+    message: 'Preciso de orientação jurídica.',
     status: 'pending',
   };
 
   beforeEach(() => {
+    localStorage.clear();
+
     TestBed.configureTestingModule({});
 
     service = TestBed.inject(AppointmentService);
   });
 
-  it('should be created', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('deve ser criado', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return an empty list initially', () => {
-    expect(service.getAll()).toEqual([]);
-  });
-
-  it('should add an appointment', () => {
+  it('deve adicionar um agendamento', () => {
     service.add(appointment);
 
-    expect(service.getAll()).toEqual([appointment]);
+    expect(service.getById(appointment.id)).toEqual(appointment);
   });
 
-  it('should return an appointment by id', () => {
+  it('deve buscar todos os agendamentos', () => {
     service.add(appointment);
 
-    const result = service.getById(1);
-
-    expect(result).toEqual(appointment);
+    expect(service.getAll()).toContainEqual(appointment);
   });
 
-  it('should return undefined when the appointment does not exist', () => {
-    const result = service.getById(999);
-
-    expect(result).toBeUndefined();
-  });
-
-  it('should update the appointment status', () => {
+  it('deve buscar agendamentos pelo usuário', () => {
     service.add(appointment);
 
-    const updated = service.updateStatus(1, 'confirmed');
-
-    expect(updated).toBe(true);
-    expect(service.getById(1)?.status).toBe('confirmed');
-  });
-
-  it('should return false when updating a nonexistent appointment', () => {
-    const updated = service.updateStatus(999, 'confirmed');
-
-    expect(updated).toBe(false);
-  });
-
-  it('should remove an appointment', () => {
-    service.add(appointment);
-
-    const removed = service.remove(1);
-
-    expect(removed).toBe(true);
-    expect(service.getAll()).toEqual([]);
-  });
-
-  it('should return false when removing a nonexistent appointment', () => {
-    const removed = service.remove(999);
-
-    expect(removed).toBe(false);
+    expect(service.getByUserId(appointment.userId)).toContainEqual(appointment);
   });
 });

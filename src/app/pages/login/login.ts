@@ -1,9 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
@@ -39,10 +35,7 @@ export class Login {
     const email = this.loginForm.value.email ?? '';
     const password = this.loginForm.value.password ?? '';
 
-    const user = this.authService.authenticate(
-      email,
-      password,
-    );
+    const user = this.authService.authenticate(email, password);
 
     if (!user) {
       this.errorMessage = 'E-mail ou senha incorretos.';
@@ -70,6 +63,3 @@ export class Login {
     return !!control && control.invalid && (control.touched || this.submitted);
   }
 }
-
-
-

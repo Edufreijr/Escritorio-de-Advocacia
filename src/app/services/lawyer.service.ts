@@ -7,12 +7,9 @@ import { generateSeedData } from '../data/seed.data';
   providedIn: 'root',
 })
 export class LawyerService {
-  private readonly storageKey =
-    'araujo-freitas-lawyers';
+  private readonly storageKey = 'araujo-freitas-lawyers';
 
-  private readonly lawyers = signal<Lawyer[]>(
-    this.loadLawyers(),
-  );
+  private readonly lawyers = signal<Lawyer[]>(this.loadLawyers());
 
   readonly all = this.lawyers.asReadonly();
 
@@ -21,33 +18,23 @@ export class LawyerService {
   }
 
   getById(id: number): Lawyer | undefined {
-    return this.lawyers().find(
-      (lawyer) => lawyer.id === id,
-    );
+    return this.lawyers().find((lawyer) => lawyer.id === id);
   }
 
-  addLawyer(
-    data: Omit<Lawyer, 'id'>,
-  ): Lawyer {
+  addLawyer(data: Omit<Lawyer, 'id'>): Lawyer {
     const lawyer: Lawyer = {
       id: Date.now(),
       ...data,
     };
 
-    this.lawyers.update((lawyers) => [
-      ...lawyers,
-      lawyer,
-    ]);
+    this.lawyers.update((lawyers) => [...lawyers, lawyer]);
 
     this.saveLawyers();
 
     return lawyer;
   }
 
-  updateLawyer(
-    id: number,
-    data: Omit<Lawyer, 'id'>,
-  ): Lawyer | undefined {
+  updateLawyer(id: number, data: Omit<Lawyer, 'id'>): Lawyer | undefined {
     const lawyer = this.getById(id);
 
     if (!lawyer) {
@@ -60,11 +47,7 @@ export class LawyerService {
     };
 
     this.lawyers.update((lawyers) =>
-      lawyers.map((item) =>
-        item.id === id
-          ? updatedLawyer
-          : item,
-      ),
+      lawyers.map((item) => (item.id === id ? updatedLawyer : item)),
     );
 
     this.saveLawyers();
@@ -73,19 +56,13 @@ export class LawyerService {
   }
 
   removeLawyer(id: number): boolean {
-    const exists = this.lawyers().some(
-      (lawyer) => lawyer.id === id,
-    );
+    const exists = this.lawyers().some((lawyer) => lawyer.id === id);
 
     if (!exists) {
       return false;
     }
 
-    this.lawyers.update((lawyers) =>
-      lawyers.filter(
-        (lawyer) => lawyer.id !== id,
-      ),
-    );
+    this.lawyers.update((lawyers) => lawyers.filter((lawyer) => lawyer.id !== id));
 
     this.saveLawyers();
 
@@ -93,11 +70,9 @@ export class LawyerService {
   }
 
   private loadLawyers(): Lawyer[] {
-    const seedLawyers =
-      generateSeedData().lawyers;
+    const seedLawyers = generateSeedData().lawyers;
 
-    const storedLawyers =
-      localStorage.getItem(this.storageKey);
+    const storedLawyers = localStorage.getItem(this.storageKey);
 
     if (!storedLawyers) {
       this.saveInitialLawyers(seedLawyers);
@@ -106,8 +81,7 @@ export class LawyerService {
     }
 
     try {
-      const parsedLawyers =
-        JSON.parse(storedLawyers);
+      const parsedLawyers = JSON.parse(storedLawyers);
 
       if (!Array.isArray(parsedLawyers)) {
         this.saveInitialLawyers(seedLawyers);
@@ -123,27 +97,16 @@ export class LawyerService {
           typeof lawyer.role === 'string' &&
           typeof lawyer.oab === 'string' &&
           Array.isArray(lawyer.specialties) &&
-          lawyer.specialties.every(
-            (specialty: unknown) =>
-              typeof specialty === 'string',
-          ) &&
+          lawyer.specialties.every((specialty: unknown) => typeof specialty === 'string') &&
           typeof lawyer.bio === 'string' &&
           typeof lawyer.image === 'string',
       );
 
-      const storedIds = new Set(
-        stored.map((lawyer) => lawyer.id),
-      );
+      const storedIds = new Set(stored.map((lawyer) => lawyer.id));
 
-      const missingSeedLawyers =
-        seedLawyers.filter(
-          (lawyer) => !storedIds.has(lawyer.id),
-        );
+      const missingSeedLawyers = seedLawyers.filter((lawyer) => !storedIds.has(lawyer.id));
 
-      const lawyers = [
-        ...stored,
-        ...missingSeedLawyers,
-      ];
+      const lawyers = [...stored, ...missingSeedLawyers];
 
       this.saveLawyersList(lawyers);
 
@@ -159,21 +122,11 @@ export class LawyerService {
     this.saveLawyersList(this.lawyers());
   }
 
-  private saveLawyersList(
-    lawyers: Lawyer[],
-  ): void {
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(lawyers),
-    );
+  private saveLawyersList(lawyers: Lawyer[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(lawyers));
   }
 
-  private saveInitialLawyers(
-    lawyers: Lawyer[],
-  ): void {
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(lawyers),
-    );
+  private saveInitialLawyers(lawyers: Lawyer[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(lawyers));
   }
 }

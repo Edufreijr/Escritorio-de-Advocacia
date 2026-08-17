@@ -1,5 +1,4 @@
 <section class="admin-page">
-
   <header class="page-header">
     <div>
       <span class="section-label">GESTÃO</span>
@@ -9,7 +8,6 @@
   </header>
 
   <section class="stats-grid">
-
     <article class="stat-card">
       <span class="stat-label">TOTAL</span>
       <strong>{{ totalContacts }}</strong>
@@ -33,11 +31,9 @@
       <strong>{{ answeredContacts }}</strong>
       <span class="stat-description">Atendimentos concluídos</span>
     </article>
-
   </section>
 
   <section class="content-card">
-
     <header class="card-header">
       <div>
         <span class="card-label">CONTATO</span>
@@ -46,21 +42,14 @@
     </header>
 
     @if (contacts().length === 0) {
-
       <div class="empty-state">
         <span class="empty-icon">✉</span>
         <h3>Nenhuma mensagem encontrada</h3>
-        <p>
-          As mensagens enviadas pelo formulário de contato aparecerão aqui.
-        </p>
+        <p>As mensagens enviadas pelo formulário de contato aparecerão aqui.</p>
       </div>
-
     } @else {
-
       <div class="table-wrapper">
-
         <table class="admin-table">
-
           <thead>
             <tr>
               <th>Cliente</th>
@@ -74,11 +63,8 @@
           </thead>
 
           <tbody>
-
             @for (contact of contacts(); track contact.id) {
-
               <tr>
-
                 <td>
                   <div class="client-info">
                     <strong>{{ contact.name }}</strong>
@@ -106,7 +92,7 @@
                 </td>
 
                 <td>
-                  {{ contact.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                  {{ contact.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
 
                 <td>
@@ -127,27 +113,15 @@
                 </td>
 
                 <td>
-                  <button
-                    type="button"
-                    class="delete-button"
-                    (click)="removeContact(contact.id)"
-                  >
+                  <button type="button" class="delete-button" (click)="removeContact(contact.id)">
                     Excluir
                   </button>
                 </td>
-
               </tr>
-
             }
-
           </tbody>
-
         </table>
-
       </div>
-
     }
-
   </section>
-
 </section>

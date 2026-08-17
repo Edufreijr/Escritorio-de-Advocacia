@@ -1,8 +1,11 @@
 import { Component, inject } from '@angular/core';
+
 import { Router, RouterLink } from '@angular/router';
 
 import { AppointmentService } from '../../services/appointment.service';
 import { AuthService } from '../../services/auth.service';
+import { LawyerService } from '../../services/lawyer.service';
+
 import { Appointment } from '../../interfaces/appointment';
 
 @Component({
@@ -13,57 +16,134 @@ import { Appointment } from '../../interfaces/appointment';
 })
 export class PainelAdvogado {
   private readonly appointmentService = inject(AppointmentService);
+
   private readonly authService = inject(AuthService);
+
+  private readonly lawyerService = inject(LawyerService);
+
   private readonly router = inject(Router);
 
   readonly user = this.authService.user;
 
-  get appointments(): Appointment[] {
+  get assignedAppointments(): Appointment[] {
     const currentUser = this.user();
 
     if (!currentUser || currentUser.role !== 'lawyer') {
       return [];
     }
 
-    return this.appointmentService.getByLawyerId(currentUser.id);
+    const lawyer = this.lawyerService.getById(currentUser.id);
+
+    if (!lawyer) {
+      return [];
+    }
+
+    return this.appointmentService
+      .getByLawyerId(currentUser.id)
+      .filter((appointment) => lawyer.specialties.includes(appointment.area));
+  }
+
+  get unassignedAppointments(): Appointment[] {
+    const currentUser = this.user();
+
+    if (!currentUser || currentUser.role !== 'lawyer') {
+      return [];
+    }
+
+    return this.appointmentService.getUnassignedForLawyer(currentUser.id);
   }
 
   get totalAppointments(): number {
-    return this.appointments.length;
+    return this.assignedAppointments.length;
   }
 
   get pendingAppointments(): number {
-    return this.appointments.filter(
-      (appointment) => appointment.status === 'pending',
-    ).length;
+    return this.assignedAppointments.filter((appointment) => appointment.status === 'pending')
+      .length;
   }
 
   get confirmedAppointments(): number {
-    return this.appointments.filter(
-      (appointment) => appointment.status === 'confirmed',
-    ).length;
+    return this.assignedAppointments.filter((appointment) => appointment.status === 'confirmed')
+      .length;
   }
 
   get cancelledAppointments(): number {
-    return this.appointments.filter(
-      (appointment) => appointment.status === 'cancelled',
-    ).length;
+    return this.assignedAppointments.filter((appointment) => appointment.status === 'cancelled')
+      .length;
+  }
+
+  getLawyerName(lawyerId?: number): string {
+    if (lawyerId === undefined) {
+      return 'Aguardando indicação';
+    }
+
+    return this.lawyerService.getById(lawyerId)?.name ?? 'Advogado não encontrado';
+  }
+
+  isAssignedToCurrentLawyer(appointment: Appointment): boolean {
+    const currentUser = this.user();
+
+    return (
+      !!currentUser && currentUser.role === 'lawyer' && appointment.lawyerId === currentUser.id
+    );
+  }
+
+  claimAppointment(id: number): void {
+    const currentUser = this.user();
+
+    if (!currentUser || currentUser.role !== 'lawyer') {
+      return;
+    }
+
+    const appointment = this.appointmentService.getById(id);
+
+    if (!appointment || appointment.lawyerId !== undefined) {
+      return;
+    }
+
+    const lawyer = this.lawyerService.getById(currentUser.id);
+
+    if (
+      !lawyer ||
+      appointment.status !== 'pending' ||
+      !lawyer.specialties.includes(appointment.area)
+    ) {
+      return;
+    }
+
+    this.appointmentService.assignLawyer(id, currentUser.id);
   }
 
   confirmAppointment(id: number): void {
+    const appointment = this.appointmentService.getById(id);
+
+    if (!appointment || !this.isAssignedToCurrentLawyer(appointment)) {
+      return;
+    }
+
     this.appointmentService.updateStatus(id, 'confirmed');
   }
 
   cancelAppointment(id: number): void {
+    const appointment = this.appointmentService.getById(id);
+
+    if (!appointment || !this.isAssignedToCurrentLawyer(appointment)) {
+      return;
+    }
+
     this.appointmentService.updateStatus(id, 'cancelled');
   }
 
   removeAppointment(id: number): void {
-    const confirmed = window.confirm(
-      'Tem certeza que deseja excluir este agendamento?',
-    );
+    const confirmed = window.confirm('Tem certeza que deseja excluir este agendamento?');
 
     if (!confirmed) {
+      return;
+    }
+
+    const appointment = this.appointmentService.getById(id);
+
+    if (!appointment || !this.isAssignedToCurrentLawyer(appointment)) {
       return;
     }
 
@@ -74,13 +154,10 @@ export class PainelAdvogado {
     switch (status) {
       case 'pending':
         return 'Pendente';
-
       case 'confirmed':
         return 'Confirmado';
-
       case 'cancelled':
         return 'Cancelado';
-
       default:
         return status;
     }

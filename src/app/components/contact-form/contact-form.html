@@ -1,10 +1,5 @@
-<form
-  class="contact-form"
-  [formGroup]="contactForm"
-  (ngSubmit)="submit()"
->
+<form class="contact-form" [formGroup]="contactForm" (ngSubmit)="submit()">
   <div class="form-grid">
-
     <div class="form-group">
       <label for="name">Nome completo</label>
 
@@ -18,9 +13,7 @@
       />
 
       @if (isInvalid('name')) {
-        <span class="error-message">
-          Informe seu nome completo.
-        </span>
+        <span class="error-message"> Informe seu nome completo. </span>
       }
     </div>
 
@@ -37,9 +30,7 @@
       />
 
       @if (isInvalid('email')) {
-        <span class="error-message">
-          Informe um e-mail válido.
-        </span>
+        <span class="error-message"> Informe um e-mail válido. </span>
       }
     </div>
 
@@ -56,9 +47,7 @@
       />
 
       @if (isInvalid('phone')) {
-        <span class="error-message">
-          Informe um telefone válido.
-        </span>
+        <span class="error-message"> Informe um telefone válido. </span>
       }
     </div>
 
@@ -74,9 +63,7 @@
       />
 
       @if (isInvalid('subject')) {
-        <span class="error-message">
-          Informe o assunto da mensagem.
-        </span>
+        <span class="error-message"> Informe o assunto da mensagem. </span>
       }
     </div>
 
@@ -92,12 +79,9 @@
       ></textarea>
 
       @if (isInvalid('message')) {
-        <span class="error-message">
-          Informe uma mensagem com pelo menos 10 caracteres.
-        </span>
+        <span class="error-message"> Informe uma mensagem com pelo menos 10 caracteres. </span>
       }
     </div>
-
   </div>
 
   @if (errorMessage) {
@@ -112,12 +96,7 @@
     </div>
   }
 
-  <button
-    type="submit"
-    class="submit-button"
-    [disabled]="contactForm.invalid && submitted"
-  >
+  <button type="submit" class="submit-button" [disabled]="contactForm.invalid && submitted">
     Enviar mensagem
   </button>
 </form>
-

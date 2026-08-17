@@ -95,7 +95,7 @@
 
 .admin-table {
   width: 100%;
-  min-width: 950px;
+  min-width: 1150px;
   border-collapse: collapse;
 }
 
@@ -239,6 +239,80 @@
   opacity: 0.9;
 }
 
+.lawyer-select {
+  width: 190px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font-family: inherit;
+  font-size: 0.75rem;
+  outline: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.lawyer-select:hover {
+  border-color: #b08d57;
+}
+
+.lawyer-select:focus {
+  border-color: #b08d57;
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.12);
+}
+
+.lawyer-assignment {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.lawyer-select {
+  width: 100%;
+  min-width: 170px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.lawyer-select:focus {
+  border-color: #b08d57;
+  box-shadow: 0 0 0 2px rgba(176, 141, 87, 0.12);
+}
+
+.assigned-label {
+  color: #047857;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.remove-lawyer-button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-lawyer-button:hover {
+  border-color: #b08d57;
+  color: #8f703f;
+  background: #faf8f4;
+}
 
 @media (max-width: 1100px) {
   .stats-grid {

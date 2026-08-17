@@ -4,9 +4,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { User } from '../interfaces/user';
 
-export const authGuard = (
-  allowedRoles: User['role'][],
-): CanActivateFn => {
+export const authGuard = (allowedRoles: User['role'][]): CanActivateFn => {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
@@ -36,4 +34,3 @@ export const authGuard = (
     return true;
   };
 };
-

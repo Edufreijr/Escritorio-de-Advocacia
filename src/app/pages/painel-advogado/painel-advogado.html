@@ -1,47 +1,27 @@
 <main class="lawyer-panel-page">
   <div class="lawyer-panel-container">
-
     <header class="lawyer-panel-header">
       <div>
-        <span class="section-label">
-          PAINEL DO ADVOGADO
-        </span>
+        <span class="section-label"> PAINEL DO ADVOGADO </span>
 
         <h1>
-          Bem-vindo, {{ user()?.name }}
+          Bem-vindo,
+          {{ user()?.name }}
         </h1>
 
-        <p>
-          Gerencie os atendimentos e acompanhe os agendamentos dos clientes.
-        </p>
+        <p>Gerencie seus atendimentos e acompanhe novas solicitações de clientes.</p>
       </div>
 
       <div class="lawyer-panel-header-actions">
+        <a routerLink="/" class="panel-button"> Voltar para o site </a>
 
-        <a
-          routerLink="/"
-          class="panel-button"
-        >
-          Voltar para o site
-        </a>
-
-        <button
-          type="button"
-          class="panel-logout"
-          (click)="logout()"
-        >
-          Sair
-        </button>
-
+        <button type="button" class="panel-logout" (click)="logout()">Sair</button>
       </div>
     </header>
 
     <section class="panel-stats">
-
       <article class="panel-stat">
-        <span class="panel-stat-label">
-          AGENDAMENTOS
-        </span>
+        <span class="panel-stat-label"> MEUS ATENDIMENTOS </span>
 
         <strong class="panel-stat-value">
           {{ totalAppointments }}
@@ -49,9 +29,7 @@
       </article>
 
       <article class="panel-stat">
-        <span class="panel-stat-label">
-          PENDENTES
-        </span>
+        <span class="panel-stat-label"> PENDENTES </span>
 
         <strong class="panel-stat-value">
           {{ pendingAppointments }}
@@ -59,9 +37,7 @@
       </article>
 
       <article class="panel-stat">
-        <span class="panel-stat-label">
-          CONFIRMADOS
-        </span>
+        <span class="panel-stat-label"> CONFIRMADOS </span>
 
         <strong class="panel-stat-value">
           {{ confirmedAppointments }}
@@ -69,54 +45,119 @@
       </article>
 
       <article class="panel-stat">
-        <span class="panel-stat-label">
-          CANCELADOS
-        </span>
+        <span class="panel-stat-label"> NOVAS SOLICITAÇÕES </span>
 
         <strong class="panel-stat-value">
-          {{ cancelledAppointments }}
+          {{ unassignedAppointments.length }}
         </strong>
       </article>
-
     </section>
 
-    <section class="panel-section">
+    @if (unassignedAppointments.length > 0) {
+      <section class="panel-section">
+        <div class="panel-section-header">
+          <div>
+            <span class="section-label"> NOVAS SOLICITAÇÕES </span>
 
+            <h2>Clientes aguardando advogado</h2>
+
+            <p>
+              Estes clientes solicitaram que o escritório indique um profissional. Você pode assumir
+              um atendimento compatível com sua área.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-table-wrapper">
+            <table class="panel-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Área</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Mensagem</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (appointment of unassignedAppointments; track appointment.id) {
+                  <tr>
+                    <td>
+                      <div class="panel-client">
+                        <strong>
+                          {{ appointment.name }}
+                        </strong>
+
+                        <span> ID #{{ appointment.id }} </span>
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="panel-area">
+                        {{ appointment.area }}
+                      </span>
+                    </td>
+
+                    <td>
+                      {{ appointment.date }}
+                    </td>
+
+                    <td>
+                      {{ appointment.time }}
+                    </td>
+
+                    <td>
+                      <p class="panel-message">
+                        {{ appointment.message }}
+                      </p>
+                    </td>
+
+                    <td>
+                      <button
+                        type="button"
+                        class="panel-action panel-action-confirm"
+                        (click)="claimAppointment(appointment.id)"
+                      >
+                        Assumir atendimento
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    }
+
+    <section class="panel-section">
       <div class="panel-section-header">
         <div>
-          <span class="section-label">
-            ATENDIMENTOS
-          </span>
+          <span class="section-label"> ATENDIMENTOS </span>
 
-          <h2>Agendamentos dos clientes</h2>
+          <h2>Meus clientes</h2>
+
+          <p>Gerencie os atendimentos que estão atribuídos a você.</p>
         </div>
       </div>
 
       <div class="panel-card">
-
-        @if (appointments.length === 0) {
-
+        @if (assignedAppointments.length === 0) {
           <div class="panel-empty">
+            <div class="panel-empty-icon">📅</div>
 
-            <div class="panel-empty-icon">
-              📅
-            </div>
-
-            <h3>Nenhum agendamento encontrado</h3>
+            <h3>Nenhum atendimento encontrado</h3>
 
             <p>
-              Quando um cliente solicitar um atendimento,
-              o agendamento aparecerá aqui.
+              Quando um cliente solicitar um atendimento diretamente com você, ele aparecerá aqui.
             </p>
-
           </div>
-
         } @else {
-
           <div class="panel-table-wrapper">
-
             <table class="panel-table">
-
               <thead>
                 <tr>
                   <th>Cliente</th>
@@ -131,25 +172,27 @@
               </thead>
 
               <tbody>
-
-                @for (
-                  appointment of appointments;
-                  track appointment.id
-                ) {
-
+                @for (appointment of assignedAppointments; track appointment.id) {
                   <tr>
-
                     <td>
                       <div class="panel-client">
-                        <strong>{{ appointment.name }}</strong>
-                        <span>ID #{{ appointment.id }}</span>
+                        <strong>
+                          {{ appointment.name }}
+                        </strong>
+
+                        <span> ID #{{ appointment.id }} </span>
                       </div>
                     </td>
 
                     <td>
                       <div class="panel-contact">
-                        <span>{{ appointment.email }}</span>
-                        <span>{{ appointment.phone }}</span>
+                        <span>
+                          {{ appointment.email }}
+                        </span>
+
+                        <span>
+                          {{ appointment.phone }}
+                        </span>
                       </div>
                     </td>
 
@@ -185,9 +228,7 @@
                     </td>
 
                     <td>
-
                       <div class="panel-actions">
-
                         @if (appointment.status !== 'confirmed') {
                           <button
                             type="button"
@@ -207,26 +248,15 @@
                             Cancelar
                           </button>
                         }
-
                       </div>
-
                     </td>
-
                   </tr>
-
                 }
-
               </tbody>
-
             </table>
-
           </div>
-
         }
-
       </div>
-
     </section>
-
   </div>
 </main>

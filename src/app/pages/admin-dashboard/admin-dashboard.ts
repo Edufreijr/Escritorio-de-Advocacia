@@ -14,12 +14,9 @@ import { LawyerService } from '../../services/lawyer.service';
 })
 export class AdminDashboard {
   private readonly authService = inject(AuthService);
-  private readonly appointmentService =
-    inject(AppointmentService);
-  private readonly contactService =
-    inject(ContactService);
-  private readonly lawyerService =
-    inject(LawyerService);
+  private readonly appointmentService = inject(AppointmentService);
+  private readonly contactService = inject(ContactService);
+  private readonly lawyerService = inject(LawyerService);
 
   readonly user = this.authService.user;
   readonly appointments = this.appointmentService.all;
@@ -35,63 +32,38 @@ export class AdminDashboard {
   }
 
   get clientsCount(): number {
-    return this.authService
-      .getUsers()
-      .filter((user) => user.role === 'user')
-      .length;
+    return this.authService.getUsers().filter((user) => user.role === 'user').length;
   }
 
   get pendingAppointments(): number {
-    return this.appointments().filter(
-      (appointment) =>
-        appointment.status === 'pending',
-    ).length;
+    return this.appointments().filter((appointment) => appointment.status === 'pending').length;
   }
 
   get confirmedAppointments(): number {
-    return this.appointments().filter(
-      (appointment) =>
-        appointment.status === 'confirmed',
-    ).length;
+    return this.appointments().filter((appointment) => appointment.status === 'confirmed').length;
   }
 
   get cancelledAppointments(): number {
-    return this.appointments().filter(
-      (appointment) =>
-        appointment.status === 'cancelled',
-    ).length;
+    return this.appointments().filter((appointment) => appointment.status === 'cancelled').length;
   }
 
   get newContacts(): number {
-    return this.contacts().filter(
-      (contact) => contact.status === 'new',
-    ).length;
+    return this.contacts().filter((contact) => contact.status === 'new').length;
   }
 
   get answeredContacts(): number {
-    return this.contacts().filter(
-      (contact) => contact.status === 'answered',
-    ).length;
+    return this.contacts().filter((contact) => contact.status === 'answered').length;
   }
 
   get recentAppointments() {
-    return [...this.appointments()]
-      .sort((a, b) => b.id - a.id)
-      .slice(0, 5);
+    return [...this.appointments()].sort((a, b) => b.id - a.id).slice(0, 5);
   }
 
   get recentContacts() {
-    return [...this.contacts()]
-      .sort((a, b) => b.id - a.id)
-      .slice(0, 5);
+    return [...this.contacts()].sort((a, b) => b.id - a.id).slice(0, 5);
   }
 
-  getStatusLabel(
-    status:
-      | 'pending'
-      | 'confirmed'
-      | 'cancelled',
-  ): string {
+  getStatusLabel(status: 'pending' | 'confirmed' | 'cancelled'): string {
     switch (status) {
       case 'pending':
         return 'Pendente';

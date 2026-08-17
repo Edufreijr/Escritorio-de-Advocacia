@@ -13,6 +13,10 @@ describe('TestimonialCard', () => {
 
     fixture = TestBed.createComponent(TestimonialCard);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('name', 'João da Silva');
+    fixture.componentRef.setInput('text', 'Excelente atendimento.');
+
     await fixture.whenStable();
   });
 

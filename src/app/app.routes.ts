@@ -61,37 +61,27 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./pages/admin-dashboard/admin-dashboard').then(
-            (m) => m.AdminDashboard,
-          ),
+          import('./pages/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
       },
       {
         path: 'usuarios',
         loadComponent: () =>
-          import('./pages/admin-usuarios/admin-usuarios').then(
-            (m) => m.AdminUsuarios,
-          ),
+          import('./pages/admin-usuarios/admin-usuarios').then((m) => m.AdminUsuarios),
       },
       {
         path: 'advogados',
         loadComponent: () =>
-          import('./pages/admin-advogados/admin-advogados').then(
-            (m) => m.AdminAdvogados,
-          ),
+          import('./pages/admin-advogados/admin-advogados').then((m) => m.AdminAdvogados),
       },
       {
         path: 'agendamentos',
         loadComponent: () =>
-          import('./pages/admin-agendamentos/admin-agendamentos').then(
-            (m) => m.AdminAgendamentos,
-          ),
+          import('./pages/admin-agendamentos/admin-agendamentos').then((m) => m.AdminAgendamentos),
       },
       {
         path: 'mensagens',
         loadComponent: () =>
-          import('./pages/admin-mensagens/admin-mensagens').then(
-            (m) => m.AdminMensagens,
-          ),
+          import('./pages/admin-mensagens/admin-mensagens').then((m) => m.AdminMensagens),
       },
     ],
   },

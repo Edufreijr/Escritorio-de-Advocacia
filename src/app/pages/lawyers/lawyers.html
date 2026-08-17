@@ -6,8 +6,8 @@
       <h1>Profissionais preparados para defender seus interesses</h1>
 
       <p>
-        Conheça nossa equipe de profissionais e conte com uma atuação jurídica
-        baseada em experiência, ética e dedicação.
+        Conheça nossa equipe de profissionais e conte com uma atuação jurídica baseada em
+        experiência, ética e dedicação.
       </p>
     </div>
   </section>
@@ -19,28 +19,21 @@
       <h2>Conheça nossa equipe</h2>
 
       <p class="section-description">
-        Nossa equipe trabalha de forma próxima aos clientes, buscando
-        compreender cada caso e construir estratégias jurídicas adequadas.
+        Nossa equipe trabalha de forma próxima aos clientes, buscando compreender cada caso e
+        construir estratégias jurídicas adequadas.
       </p>
 
       @if (lawyers().length === 0) {
-
         <div class="empty-state">
           <span class="empty-icon">⚖</span>
 
           <h3>Nenhum advogado cadastrado</h3>
 
-          <p>
-            Os advogados cadastrados pelo administrador aparecerão aqui.
-          </p>
+          <p>Os advogados cadastrados pelo administrador aparecerão aqui.</p>
         </div>
-
       } @else {
-
         <div class="lawyers-grid">
-
           @for (lawyer of lawyers(); track lawyer.id) {
-
             <app-lawyer-card
               [name]="lawyer.name"
               [role]="lawyer.role"
@@ -48,13 +41,9 @@
               [specialties]="lawyer.specialties"
               link="/agendamento"
             />
-
           }
-
         </div>
-
       }
-
     </div>
   </section>
 
@@ -62,13 +51,9 @@
     <div class="container">
       <h2>Precisa falar com um advogado?</h2>
 
-      <p>
-        Agende uma conversa com nossa equipe e apresente sua situação.
-      </p>
+      <p>Agende uma conversa com nossa equipe e apresente sua situação.</p>
 
-      <a routerLink="/agendamento" class="cta-button">
-        Agendar consulta
-      </a>
+      <a routerLink="/agendamento" class="cta-button"> Agendar consulta </a>
     </div>
   </section>
 </main>

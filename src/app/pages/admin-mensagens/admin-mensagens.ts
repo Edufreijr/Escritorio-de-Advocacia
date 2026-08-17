@@ -15,9 +15,7 @@ export class AdminMensagens {
   readonly contacts = this.contactService.all;
 
   removeContact(id: number): void {
-    const confirmed = confirm(
-      'Deseja realmente excluir esta mensagem?',
-    );
+    const confirmed = confirm('Deseja realmente excluir esta mensagem?');
 
     if (!confirmed) {
       return;
@@ -31,20 +29,14 @@ export class AdminMensagens {
   }
 
   get newContacts(): number {
-    return this.contacts().filter(
-      (contact) => contact.status === 'new',
-    ).length;
+    return this.contacts().filter((contact) => contact.status === 'new').length;
   }
 
   get readContacts(): number {
-    return this.contacts().filter(
-      (contact) => contact.status === 'read',
-    ).length;
+    return this.contacts().filter((contact) => contact.status === 'read').length;
   }
 
   get answeredContacts(): number {
-    return this.contacts().filter(
-      (contact) => contact.status === 'answered',
-    ).length;
+    return this.contacts().filter((contact) => contact.status === 'answered').length;
   }
 }

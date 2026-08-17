@@ -5,6 +5,7 @@
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
 }
 
 .form-grid {
@@ -86,6 +87,64 @@
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
+.lawyer-choice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.lawyer-choice-option {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.lawyer-choice-option:hover {
+  border-color: #b08d57;
+  background: #fffcf7;
+}
+
+.lawyer-choice-option.selected {
+  border-color: #b08d57;
+  background: #fffcf7;
+  box-shadow: 0 0 0 2px rgba(176, 141, 87, 0.08);
+}
+
+.lawyer-choice-option input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #b08d57;
+  cursor: pointer;
+}
+
+.lawyer-choice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lawyer-choice-content strong {
+  color: #1f2937;
+  font-size: 0.92rem;
+}
+
+.lawyer-choice-content small {
+  color: #6b7280;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
 .error-message {
   color: #dc2626;
   font-size: 0.8rem;
@@ -155,6 +214,10 @@
 
   .form-group-full {
     grid-column: auto;
+  }
+
+  .lawyer-choice {
+    grid-template-columns: 1fr;
   }
 
   .submit-button {

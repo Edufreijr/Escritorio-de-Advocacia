@@ -1,93 +1,118 @@
 <section class="admin-page">
-
   <header class="page-header">
     <div>
-      <span class="section-label">GESTÃO</span>
+      <span class="section-label"> GESTÃO </span>
+
       <h1>Agendamentos</h1>
+
       <p>Gerencie as solicitações de atendimento realizadas pelos clientes.</p>
     </div>
   </header>
 
   <section class="stats-grid">
-
     <article class="stat-card">
-      <span class="stat-label">TOTAL</span>
-      <strong>{{ totalAppointments }}</strong>
-      <span class="stat-description">Agendamentos registrados</span>
+      <span class="stat-label"> TOTAL </span>
+
+      <strong>
+        {{ totalAppointments }}
+      </strong>
+
+      <span class="stat-description"> Agendamentos registrados </span>
     </article>
 
     <article class="stat-card">
-      <span class="stat-label">PENDENTES</span>
-      <strong>{{ pendingAppointments }}</strong>
-      <span class="stat-description">Aguardando confirmação</span>
+      <span class="stat-label"> PENDENTES </span>
+
+      <strong>
+        {{ pendingAppointments }}
+      </strong>
+
+      <span class="stat-description"> Aguardando confirmação </span>
     </article>
 
     <article class="stat-card">
-      <span class="stat-label">CONFIRMADOS</span>
-      <strong>{{ confirmedAppointments }}</strong>
-      <span class="stat-description">Atendimentos confirmados</span>
+      <span class="stat-label"> CONFIRMADOS </span>
+
+      <strong>
+        {{ confirmedAppointments }}
+      </strong>
+
+      <span class="stat-description"> Atendimentos confirmados </span>
     </article>
 
     <article class="stat-card">
-      <span class="stat-label">CANCELADOS</span>
-      <strong>{{ cancelledAppointments }}</strong>
-      <span class="stat-description">Agendamentos cancelados</span>
-    </article>
+      <span class="stat-label"> CANCELADOS </span>
 
+      <strong>
+        {{ cancelledAppointments }}
+      </strong>
+
+      <span class="stat-description"> Agendamentos cancelados </span>
+    </article>
   </section>
 
   <section class="content-card">
-
     <header class="card-header">
       <div>
-        <span class="card-label">SOLICITAÇÕES</span>
+        <span class="card-label"> SOLICITAÇÕES </span>
+
         <h2>Todos os agendamentos</h2>
       </div>
     </header>
 
     @if (appointments().length === 0) {
-
       <div class="empty-state">
-        <span class="empty-icon">▣</span>
+        <span class="empty-icon"> ▣ </span>
+
         <h3>Nenhum agendamento encontrado</h3>
+
         <p>As solicitações realizadas pelos clientes aparecerão aqui.</p>
       </div>
-
     } @else {
-
       <div class="table-wrapper">
-
         <table class="admin-table">
-
           <thead>
             <tr>
               <th>Cliente</th>
+
               <th>Contato</th>
+
               <th>Área</th>
+
               <th>Data</th>
+
               <th>Horário</th>
+
+              <th>Advogado</th>
+
               <th>Status</th>
+
               <th>Ações</th>
             </tr>
           </thead>
 
           <tbody>
-
             @for (appointment of appointments(); track appointment.id) {
-
               <tr>
-
                 <td>
                   <div class="client-info">
-                    <strong>{{ appointment.name }}</strong>
-                    <span>ID #{{ appointment.id }}</span>
+                    <strong>
+                      {{ appointment.name }}
+                    </strong>
+
+                    <span> ID #{{ appointment.id }} </span>
                   </div>
                 </td>
 
                 <td>
                   <div class="contact-info">
-                    <span>{{ appointment.email }}</span>
-                    <span>{{ appointment.phone }}</span>
+                    <span>
+                      {{ appointment.email }}
+                    </span>
+
+                    <span>
+                      {{ appointment.phone }}
+                    </span>
                   </div>
                 </td>
 
@@ -103,6 +128,28 @@
 
                 <td>
                   {{ appointment.time }}
+                </td>
+
+                <td>
+                  <div class="lawyer-assignment">
+                    <select
+                      class="lawyer-select"
+                      [value]="appointment.lawyerId ?? ''"
+                      (change)="assignLawyer(appointment.id, $event)"
+                    >
+                      <option value="">Selecione</option>
+
+                      @for (lawyer of getLawyersForAppointment(appointment); track lawyer.id) {
+                        <option [value]="lawyer.id">
+                          {{ lawyer.name }}
+                        </option>
+                      }
+                    </select>
+
+                    @if (appointment.lawyerId !== undefined) {
+                      <span class="assigned-label"> Atribuído </span>
+                    }
+                  </div>
                 </td>
 
                 <td>
@@ -124,6 +171,16 @@
 
                 <td>
                   <div class="actions">
+                    @if (appointment.lawyerId !== undefined) {
+                      <button
+                        type="button"
+                        class="remove-lawyer-button"
+                        (click)="removeLawyer(appointment.id)"
+                      >
+                        Retirar
+                      </button>
+                    }
+
                     <button
                       type="button"
                       class="delete-button"
@@ -133,19 +190,11 @@
                     </button>
                   </div>
                 </td>
-
               </tr>
-
             }
-
           </tbody>
-
         </table>
-
       </div>
-
     }
-
   </section>
-
 </section>

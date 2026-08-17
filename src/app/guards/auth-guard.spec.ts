@@ -6,51 +6,82 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../interfaces/user';
 
 describe('authGuard', () => {
-  let authService: AuthService;
+  let authService: {
+    isLoggedIn: ReturnType<typeof vi.fn>;
+    getCurrentUser: ReturnType<typeof vi.fn>;
+  };
+
+  let router: {
+    createUrlTree: ReturnType<typeof vi.fn>;
+  };
 
   const user: User = {
     id: 1,
     name: 'Administrador',
-    email: 'admin@araujoefreitas.com.br',
+    email: 'admin@teste.com',
+    phone: '(11) 99999-9999',
     password: '123456',
     role: 'admin',
   };
 
   beforeEach(() => {
+    authService = {
+      isLoggedIn: vi.fn(),
+      getCurrentUser: vi.fn(),
+    };
+
+    router = {
+      createUrlTree: vi.fn((commands: string[]) => commands),
+    };
+
     TestBed.configureTestingModule({
       providers: [
-        AuthService,
+        {
+          provide: AuthService,
+          useValue: authService,
+        },
         {
           provide: Router,
-          useValue: {
-            createUrlTree: (commands: string[]) => ({
-              commands,
-            }),
-          },
+          useValue: router,
         },
       ],
     });
-
-    authService = TestBed.inject(AuthService);
   });
 
-  it('should allow an authenticated user', () => {
-    authService.login(user);
+  it('deve permitir acesso quando o usuário está autenticado e possui a permissão', () => {
+    authService.isLoggedIn.mockReturnValue(true);
+    authService.getCurrentUser.mockReturnValue(user);
 
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard({} as never, {} as never),
-    );
+    const guard = authGuard(['admin']);
+
+    const result = TestBed.runInInjectionContext(() => guard({} as never, {} as never));
 
     expect(result).toBe(true);
   });
 
-  it('should redirect an unauthenticated user to login', () => {
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard({} as never, {} as never),
-    );
+  it('deve redirecionar para login quando não existe usuário autenticado', () => {
+    authService.isLoggedIn.mockReturnValue(false);
 
-    expect(result).toEqual({
-      commands: ['/login'],
+    const guard = authGuard(['admin']);
+
+    const result = TestBed.runInInjectionContext(() => guard({} as never, {} as never));
+
+    expect(result).toEqual(['/login']);
+    expect(router.createUrlTree).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('deve redirecionar quando o usuário não possui permissão', () => {
+    authService.isLoggedIn.mockReturnValue(true);
+    authService.getCurrentUser.mockReturnValue({
+      ...user,
+      role: 'user',
     });
+
+    const guard = authGuard(['admin']);
+
+    const result = TestBed.runInInjectionContext(() => guard({} as never, {} as never));
+
+    expect(result).toEqual(['/minha-conta']);
+    expect(router.createUrlTree).toHaveBeenCalledWith(['/minha-conta']);
   });
 });

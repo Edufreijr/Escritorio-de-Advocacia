@@ -1,9 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ContactService } from '../../services/contact.service';
 import { Contact } from '../../interfaces/contact';
@@ -56,8 +52,7 @@ export class ContactForm {
 
     this.contactService.add(contact);
 
-    this.successMessage =
-      'Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.';
+    this.successMessage = 'Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.';
 
     this.contactForm.reset();
     this.submitted = false;
@@ -69,5 +64,3 @@ export class ContactForm {
     return !!control && control.invalid && (control.touched || this.submitted);
   }
 }
-
-

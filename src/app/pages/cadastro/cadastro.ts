@@ -1,9 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
@@ -43,8 +39,7 @@ export class Cadastro {
     const email = this.cadastroForm.value.email ?? '';
     const phone = this.cadastroForm.value.phone ?? '';
     const password = this.cadastroForm.value.password ?? '';
-    const confirmPassword =
-      this.cadastroForm.value.confirmPassword ?? '';
+    const confirmPassword = this.cadastroForm.value.confirmPassword ?? '';
 
     if (password !== confirmPassword) {
       this.errorMessage = 'As senhas não coincidem.';
@@ -52,21 +47,14 @@ export class Cadastro {
     }
 
     if (this.authService.isEmailRegistered(email)) {
-      this.errorMessage =
-        'Este e-mail já está cadastrado. Faça login para continuar.';
+      this.errorMessage = 'Este e-mail já está cadastrado. Faça login para continuar.';
       return;
     }
 
-    const user = this.authService.register(
-      name,
-      email,
-      phone,
-      password,
-    );
+    const user = this.authService.register(name, email, phone, password);
 
     if (!user) {
-      this.errorMessage =
-        'Não foi possível realizar o cadastro.';
+      this.errorMessage = 'Não foi possível realizar o cadastro.';
       return;
     }
 

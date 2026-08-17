@@ -1,39 +1,24 @@
 <main class="login-page">
   <section class="login-section">
     <div class="login-container">
-
       <div class="login-brand">
-        <span class="login-label">
-          ARAUJO & FREITAS ADVOGADOS
-        </span>
+        <span class="login-label"> ARAUJO & FREITAS ADVOGADOS </span>
 
         <h1>Acesso ao escritório</h1>
 
-        <p>
-          Entre com suas credenciais para acessar sua área exclusiva.
-        </p>
+        <p>Entre com suas credenciais para acessar sua área exclusiva.</p>
       </div>
 
       <div class="login-card">
-
         <div class="login-card-header">
           <h2>Entrar</h2>
 
-          <p>
-            Informe seu e-mail e senha para continuar.
-          </p>
+          <p>Informe seu e-mail e senha para continuar.</p>
         </div>
 
-        <form
-          class="login-form"
-          [formGroup]="loginForm"
-          (ngSubmit)="submit()"
-        >
-
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()">
           <div class="form-group">
-            <label for="email">
-              E-mail
-            </label>
+            <label for="email"> E-mail </label>
 
             <input
               id="email"
@@ -45,16 +30,12 @@
             />
 
             @if (isInvalid('email')) {
-              <span class="error-message">
-                Informe um e-mail válido.
-              </span>
+              <span class="error-message"> Informe um e-mail válido. </span>
             }
           </div>
 
           <div class="form-group">
-            <label for="password">
-              Senha
-            </label>
+            <label for="password"> Senha </label>
 
             <input
               id="password"
@@ -66,9 +47,7 @@
             />
 
             @if (isInvalid('password')) {
-              <span class="error-message">
-                A senha deve possuir pelo menos 6 caracteres.
-              </span>
+              <span class="error-message"> A senha deve possuir pelo menos 6 caracteres. </span>
             }
           </div>
 
@@ -78,35 +57,17 @@
             </div>
           }
 
-          <button
-            type="submit"
-            class="login-button"
-          >
-            Entrar
-          </button>
-
+          <button type="submit" class="login-button">Entrar</button>
         </form>
 
         <div class="login-register">
-          <span>
-            Ainda não possui uma conta?
-          </span>
+          <span> Ainda não possui uma conta? </span>
 
-          <a routerLink="/cadastro">
-            Cadastre-se
-          </a>
+          <a routerLink="/cadastro"> Cadastre-se </a>
         </div>
 
-        <a
-          routerLink="/"
-          class="back-link"
-        >
-          Voltar para o site
-        </a>
-
+        <a routerLink="/" class="back-link"> Voltar para o site </a>
       </div>
-
     </div>
   </section>
 </main>
-

@@ -1,10 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -25,5 +20,3 @@ export class Admin {
     this.router.navigate(['/login']);
   }
 }
-
-

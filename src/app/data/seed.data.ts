@@ -25,28 +25,12 @@ const userNames = [
   'Lucas Rafael Barbosa',
 ];
 
-const lawyerNames = [
-  'Lucas Mendes Ribeiro',
-  'Fernanda Almeida Costa',
-  'Marcelo Henrique Souza',
-];
+const lawyerNames = ['Lucas Mendes Ribeiro', 'Fernanda Almeida Costa', 'Marcelo Henrique Souza'];
 
 const lawyerSpecialties = [
-  [
-    'Direito de Família',
-    'Direito Civil',
-    'Direito Trabalhista',
-  ],
-  [
-    'Direito Empresarial',
-    'Direito Tributário',
-    'Direito Civil',
-  ],
-  [
-    'Direito Criminal',
-    'Direito Trabalhista',
-    'Direito Civil',
-  ],
+  ['Direito de Família', 'Direito Civil', 'Direito Trabalhista'],
+  ['Direito Empresarial', 'Direito Tributário', 'Direito Civil'],
+  ['Direito Criminal', 'Direito Trabalhista', 'Direito Civil'],
 ];
 
 const lawyerBios = [
@@ -105,99 +89,81 @@ const appointmentTimes = [
 export function generateSeedData(): SeedData {
   faker.seed(2026);
 
-  const users: User[] = Array.from(
-    { length: 10 },
-    (_, index) => ({
-      id: 1000 + index,
-      name: userNames[index],
-      email: faker.internet.email().toLowerCase(),
-      phone: faker.phone.number(),
-      password: '123456',
-      role: 'user',
-    }),
-  );
+  const users: User[] = Array.from({ length: 10 }, (_, index) => ({
+    id: 1000 + index,
+    name: userNames[index],
+    email: faker.internet.email().toLowerCase(),
+    phone: faker.phone.number(),
+    password: '123456',
+    role: 'user',
+  }));
 
-  const lawyers: Lawyer[] = Array.from(
-    { length: 3 },
-    (_, index) => ({
-      id: 2000 + index,
-      name: lawyerNames[index],
-      role: 'Advogado(a) Associado(a)',
-      oab: `${faker.number.int({
-        min: 100000,
-        max: 999999,
-      })}/SP`,
-      specialties: lawyerSpecialties[index],
-      bio: lawyerBios[index],
-      image: '',
-    }),
-  );
+  const lawyers: Lawyer[] = Array.from({ length: 3 }, (_, index) => ({
+    id: 2000 + index,
+    name: lawyerNames[index],
+    role: 'Advogado(a) Associado(a)',
+    oab: `${faker.number.int({
+      min: 100000,
+      max: 999999,
+    })}/SP`,
+    specialties: lawyerSpecialties[index],
+    bio: lawyerBios[index],
+    image: '',
+  }));
 
-  const contacts: Contact[] = Array.from(
-    { length: 10 },
-    (_, index) => {
-      const user = users[index];
+  const contacts: Contact[] = Array.from({ length: 10 }, (_, index) => {
+    const user = users[index];
 
-      return {
-        id: 3000 + index,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        subject:
-          contactSubjects[
-            index % contactSubjects.length
-          ],
-        message: contactMessages[index],
-        createdAt: faker.date
-          .recent({
-            days: 30,
-          })
-          .toISOString(),
-        status: faker.helpers.arrayElement([
-          'new',
-          'read',
-          'answered',
-        ]),
-      };
-    },
-  );
+    return {
+      id: 3000 + index,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      subject: contactSubjects[index % contactSubjects.length],
+      message: contactMessages[index],
+      createdAt: faker.date
+        .recent({
+          days: 30,
+        })
+        .toISOString(),
+      status: faker.helpers.arrayElement(['new', 'read', 'answered']),
+    };
+  });
 
-  const appointments: Appointment[] = Array.from(
-    { length: 10 },
-    (_, index) => {
-      const user = users[index];
-      const lawyer = lawyers[index % lawyers.length];
+  const appointments: Appointment[] = Array.from({ length: 10 }, (_, index) => {
+    const user = users[index];
 
-      return {
-        id: 4000 + index,
-        userId: user.id,
-        lawyerId: lawyer.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        area: faker.helpers.arrayElement(
-          lawyer.specialties,
-        ),
-        date: faker.date
-          .future({
-            years: 1,
-          })
-          .toISOString()
-          .split('T')[0],
-        time:
-          appointmentTimes[
-            index % appointmentTimes.length
-          ],
-        message: appointmentMessages[index],
-        status: faker.helpers.arrayElement([
-          'pending',
-          'confirmed',
-          'cancelled',
-        ]),
-      };
-    },
-  );
+    const lawyer = lawyers[index % lawyers.length];
 
+    return {
+      id: 4000 + index,
+
+      userId: user.id,
+
+      lawyerId: lawyer.id,
+
+      name: user.name,
+
+      email: user.email,
+
+      phone: user.phone,
+
+      area: faker.helpers.arrayElement(lawyer.specialties),
+
+      date: faker.date
+        .future({
+          years: 1,
+        })
+        .toISOString()
+        .split('T')[0],
+
+      time: appointmentTimes[index % appointmentTimes.length],
+
+      message: appointmentMessages[index],
+
+      status: faker.helpers.arrayElement(['pending', 'confirmed', 'cancelled']),
+    };
+  });
   return {
     users,
     lawyers,

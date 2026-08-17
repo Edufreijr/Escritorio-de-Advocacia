@@ -1,153 +1,92 @@
 <section class="dashboard">
-
   <header class="dashboard-header">
-
     <div>
-      <span class="section-label">
-        VISÃO GERAL
-      </span>
+      <span class="section-label"> VISÃO GERAL </span>
 
       <h1>Dashboard</h1>
 
-      <p>
-        Acompanhe os principais indicadores do seu escritório.
-      </p>
+      <p>Acompanhe os principais indicadores do seu escritório.</p>
     </div>
 
     <div class="dashboard-welcome">
-
-      <span>
-        Bem-vindo,
-      </span>
+      <span> Bem-vindo, </span>
 
       <strong>
         {{ user()?.name }}
       </strong>
-
     </div>
-
   </header>
 
   <section class="dashboard-stats">
-
     <article class="dashboard-stat">
-
-      <div class="stat-icon">
-        ◉
-      </div>
+      <div class="stat-icon">◉</div>
 
       <div class="stat-content">
-
-        <span>
-          Usuários
-        </span>
+        <span> Usuários </span>
 
         <strong>
           {{ usersCount }}
         </strong>
 
-        <small>
-          {{ clientsCount }} clientes
-        </small>
-
+        <small> {{ clientsCount }} clientes </small>
       </div>
-
     </article>
 
     <article class="dashboard-stat">
-
-      <div class="stat-icon">
-        ⚖
-      </div>
+      <div class="stat-icon">⚖</div>
 
       <div class="stat-content">
-
-        <span>
-          Advogados
-        </span>
+        <span> Advogados </span>
 
         <strong>
           {{ lawyersCount }}
         </strong>
 
-        <small>
-          Profissionais cadastrados
-        </small>
-
+        <small> Profissionais cadastrados </small>
       </div>
-
     </article>
 
     <article class="dashboard-stat">
-
-      <div class="stat-icon">
-        ▣
-      </div>
+      <div class="stat-icon">▣</div>
 
       <div class="stat-content">
-
-        <span>
-          Agendamentos
-        </span>
+        <span> Agendamentos </span>
 
         <strong>
           {{ appointments().length }}
         </strong>
 
-        <small>
-          {{ pendingAppointments }} pendentes
-        </small>
-
+        <small> {{ pendingAppointments }} pendentes </small>
       </div>
-
     </article>
 
     <article class="dashboard-stat">
-
-      <div class="stat-icon">
-        ✉
-      </div>
+      <div class="stat-icon">✉</div>
 
       <div class="stat-content">
-
-        <span>
-          Mensagens
-        </span>
+        <span> Mensagens </span>
 
         <strong>
           {{ contacts().length }}
         </strong>
 
-        <small>
-          {{ newContacts }} novas
-        </small>
-
+        <small> {{ newContacts }} novas </small>
       </div>
-
     </article>
-
   </section>
 
   <section class="dashboard-grid">
-
     <article class="dashboard-card">
-
       <div class="dashboard-card-header">
-
         <div>
-          <span class="card-label">
-            AGENDAMENTOS
-          </span>
+          <span class="card-label"> AGENDAMENTOS </span>
 
           <h2>Resumo dos atendimentos</h2>
         </div>
-
       </div>
 
       <div class="appointment-summary">
-
         <div class="summary-item">
-
           <span class="summary-indicator pending"></span>
 
           <div>
@@ -155,15 +94,11 @@
               {{ pendingAppointments }}
             </strong>
 
-            <span>
-              Pendentes
-            </span>
+            <span> Pendentes </span>
           </div>
-
         </div>
 
         <div class="summary-item">
-
           <span class="summary-indicator confirmed"></span>
 
           <div>
@@ -171,15 +106,11 @@
               {{ confirmedAppointments }}
             </strong>
 
-            <span>
-              Confirmados
-            </span>
+            <span> Confirmados </span>
           </div>
-
         </div>
 
         <div class="summary-item">
-
           <span class="summary-indicator cancelled"></span>
 
           <div>
@@ -187,126 +118,76 @@
               {{ cancelledAppointments }}
             </strong>
 
-            <span>
-              Cancelados
-            </span>
+            <span> Cancelados </span>
           </div>
-
         </div>
-
       </div>
-
     </article>
 
     <article class="dashboard-card">
-
       <div class="dashboard-card-header">
-
         <div>
-          <span class="card-label">
-            MENSAGENS
-          </span>
+          <span class="card-label"> MENSAGENS </span>
 
           <h2>Status das mensagens</h2>
         </div>
-
       </div>
 
       <div class="message-summary">
-
         <div class="message-summary-item">
-
           <strong>
             {{ newContacts }}
           </strong>
 
-          <span>
-            Novas mensagens
-          </span>
-
+          <span> Novas mensagens </span>
         </div>
 
         <div class="message-summary-item">
-
           <strong>
             {{ answeredContacts }}
           </strong>
 
-          <span>
-            Respondidas
-          </span>
-
+          <span> Respondidas </span>
         </div>
-
       </div>
-
     </article>
-
   </section>
 
   <section class="dashboard-grid">
-
     <article class="dashboard-card dashboard-table-card">
-
       <div class="dashboard-card-header">
-
         <div>
-          <span class="card-label">
-            ATIVIDADE RECENTE
-          </span>
+          <span class="card-label"> ATIVIDADE RECENTE </span>
 
           <h2>Últimos agendamentos</h2>
         </div>
 
-        <a
-          routerLink="/admin/agendamentos"
-          class="card-link"
-        >
-          Ver todos
-        </a>
-
+        <a routerLink="/admin/agendamentos" class="card-link"> Ver todos </a>
       </div>
 
       @if (recentAppointments.length === 0) {
-
         <div class="dashboard-empty">
           <span>▣</span>
 
-          <p>
-            Nenhum agendamento registrado.
-          </p>
+          <p>Nenhum agendamento registrado.</p>
         </div>
-
       } @else {
-
         <div class="dashboard-table-wrapper">
-
           <table class="dashboard-table">
-
             <thead>
-
               <tr>
                 <th>Cliente</th>
                 <th>Área</th>
                 <th>Data</th>
                 <th>Status</th>
               </tr>
-
             </thead>
 
             <tbody>
-
-              @for (
-                appointment of recentAppointments;
-                track appointment.id
-              ) {
-
+              @for (appointment of recentAppointments; track appointment.id) {
                 <tr>
-
                   <td>
-
                     <div class="table-client">
-
                       <strong>
                         {{ appointment.name }}
                       </strong>
@@ -314,9 +195,7 @@
                       <span>
                         {{ appointment.email }}
                       </span>
-
                     </div>
-
                   </td>
 
                   <td>
@@ -328,7 +207,6 @@
                   </td>
 
                   <td>
-
                     <span
                       class="status"
                       [class.pending]="appointment.status === 'pending'"
@@ -337,71 +215,41 @@
                     >
                       {{ getStatusLabel(appointment.status) }}
                     </span>
-
                   </td>
-
                 </tr>
-
               }
-
             </tbody>
-
           </table>
-
         </div>
-
       }
-
     </article>
 
     <article class="dashboard-card dashboard-table-card">
-
       <div class="dashboard-card-header">
-
         <div>
-          <span class="card-label">
-            CONTATO
-          </span>
+          <span class="card-label"> CONTATO </span>
 
           <h2>Mensagens recentes</h2>
         </div>
 
-        <a
-          routerLink="/admin/mensagens"
-          class="card-link"
-        >
-          Ver todas
-        </a>
-
+        <a routerLink="/admin/mensagens" class="card-link"> Ver todas </a>
       </div>
 
       @if (recentContacts.length === 0) {
-
         <div class="dashboard-empty">
           <span>✉</span>
 
-          <p>
-            Nenhuma mensagem recebida.
-          </p>
+          <p>Nenhuma mensagem recebida.</p>
         </div>
-
       } @else {
-
         <div class="dashboard-contacts">
-
-          @for (
-            contact of recentContacts;
-            track contact.id
-          ) {
-
+          @for (contact of recentContacts; track contact.id) {
             <div class="contact-item">
-
               <div class="contact-avatar">
                 {{ contact.name.charAt(0).toUpperCase() }}
               </div>
 
               <div class="contact-info">
-
                 <strong>
                   {{ contact.name }}
                 </strong>
@@ -409,7 +257,6 @@
                 <span>
                   {{ contact.subject }}
                 </span>
-
               </div>
 
               <span
@@ -418,23 +265,18 @@
                 [class.confirmed]="contact.status === 'answered'"
                 [class.cancelled]="contact.status === 'read'"
               >
-                {{ contact.status === 'new'
-                  ? 'Nova'
-                  : contact.status === 'read'
-                    ? 'Lida'
-                    : 'Respondida' }}
+                {{
+                  contact.status === 'new'
+                    ? 'Nova'
+                    : contact.status === 'read'
+                      ? 'Lida'
+                      : 'Respondida'
+                }}
               </span>
-
             </div>
-
           }
-
         </div>
-
       }
-
     </article>
-
   </section>
-
 </section>

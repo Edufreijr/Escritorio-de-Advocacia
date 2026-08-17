@@ -384,15 +384,12 @@
 }
 
 @media (max-width: 1100px) {
-
   .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media (max-width: 800px) {
-
   .dashboard-header {
     align-items: flex-start;
     flex-direction: column;
@@ -405,11 +402,9 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media (max-width: 550px) {
-
   .dashboard-stats {
     grid-template-columns: 1fr;
   }
@@ -437,5 +432,4 @@
     border-top: 1px solid #e5e7eb;
     border-left: 0;
   }
-
 }

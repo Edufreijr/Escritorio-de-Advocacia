@@ -9,5 +9,3 @@ import { ContactForm } from '../../components/contact-form/contact-form';
   styleUrl: './contact.css',
 })
 export class Contact {}
-
-

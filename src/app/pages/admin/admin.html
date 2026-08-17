@@ -1,19 +1,12 @@
 <main class="admin-layout">
-
   <aside class="admin-sidebar">
-
     <div class="admin-brand">
-      <span class="admin-brand-label">
-        ARAÚJO & FREITAS
-      </span>
+      <span class="admin-brand-label"> ARAÚJO & FREITAS </span>
 
-      <strong>
-        Painel Administrativo
-      </strong>
+      <strong> Painel Administrativo </strong>
     </div>
 
     <div class="admin-profile">
-
       <div class="admin-profile-avatar">
         {{ user()?.name?.charAt(0)?.toUpperCase() }}
       </div>
@@ -23,18 +16,12 @@
           {{ user()?.name }}
         </strong>
 
-        <span>
-          Administrador
-        </span>
+        <span> Administrador </span>
       </div>
-
     </div>
 
     <nav class="admin-navigation">
-
-      <span class="admin-navigation-label">
-        VISÃO GERAL
-      </span>
+      <span class="admin-navigation-label"> VISÃO GERAL </span>
 
       <a
         routerLink="/admin/dashboard"
@@ -46,9 +33,7 @@
         <span>Dashboard</span>
       </a>
 
-      <span class="admin-navigation-label">
-        GESTÃO
-      </span>
+      <span class="admin-navigation-label"> GESTÃO </span>
 
       <a
         routerLink="/admin/usuarios"
@@ -89,60 +74,30 @@
         <span class="admin-nav-icon">✉</span>
         <span>Mensagens</span>
       </a>
-
     </nav>
 
     <div class="admin-sidebar-footer">
+      <a routerLink="/" class="admin-footer-link"> ← Voltar para o site </a>
 
-      <a
-        routerLink="/"
-        class="admin-footer-link"
-      >
-        ← Voltar para o site
-      </a>
-
-      <button
-        type="button"
-        class="admin-footer-link admin-logout"
-        (click)="logout()"
-      >
+      <button type="button" class="admin-footer-link admin-logout" (click)="logout()">
         Sair da conta
       </button>
-
     </div>
-
   </aside>
 
   <section class="admin-content">
-
     <header class="admin-mobile-header">
-
       <div>
-        <span>
-          ARAÚJO & FREITAS
-        </span>
+        <span> ARAÚJO & FREITAS </span>
 
-        <strong>
-          Painel Administrativo
-        </strong>
+        <strong> Painel Administrativo </strong>
       </div>
 
-      <button
-        type="button"
-        class="admin-mobile-logout"
-        (click)="logout()"
-      >
-        Sair
-      </button>
-
+      <button type="button" class="admin-mobile-logout" (click)="logout()">Sair</button>
     </header>
 
     <div class="admin-content-inner">
       <router-outlet></router-outlet>
     </div>
-
   </section>
-
 </main>
-
-

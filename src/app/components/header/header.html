@@ -1,6 +1,5 @@
 <header class="header">
   <div class="header-container">
-
     <a routerLink="/" class="logo">
       <span class="logo-name">ARAÚJO FREITAS</span>
       <span class="logo-subtitle">ADVOGADOS</span>
@@ -16,20 +15,11 @@
     </nav>
 
     @if (authService.isLoggedIn()) {
-      <a
-        [routerLink]="panelRoute"
-        class="login-button"
-      >
+      <a [routerLink]="panelRoute" class="login-button">
         {{ panelLabel }}
       </a>
     } @else {
-      <a
-        routerLink="/login"
-        class="login-button"
-      >
-        Login
-      </a>
+      <a routerLink="/login" class="login-button"> Login </a>
     }
-
   </div>
 </header>

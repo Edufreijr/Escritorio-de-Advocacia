@@ -1,9 +1,13 @@
 import { Component, inject } from '@angular/core';
+
 import { Router, RouterLink } from '@angular/router';
 
 import { AppointmentService } from '../../services/appointment.service';
 import { AuthService } from '../../services/auth.service';
+
 import { Appointment } from '../../interfaces/appointment';
+
+import { LawyerService } from '../../services/lawyer.service';
 
 @Component({
   selector: 'app-minha-conta',
@@ -13,7 +17,11 @@ import { Appointment } from '../../interfaces/appointment';
 })
 export class MinhaConta {
   private readonly authService = inject(AuthService);
+
   private readonly appointmentService = inject(AppointmentService);
+
+  private readonly lawyerService = inject(LawyerService);
+
   private readonly router = inject(Router);
 
   readonly user = this.authService.user;
@@ -28,8 +36,17 @@ export class MinhaConta {
     return this.appointmentService
       .getAll()
       .filter(
-        (appointment) => appointment.email === currentUser.email,
+        (appointment) =>
+          appointment.userId === currentUser.id || appointment.email === currentUser.email,
       );
+  }
+
+  getLawyerName(lawyerId?: number): string {
+    if (lawyerId === undefined) {
+      return 'Aguardando indicação do escritório';
+    }
+
+    return this.lawyerService.getById(lawyerId)?.name ?? 'Advogado não encontrado';
   }
 
   getStatusLabel(status: Appointment['status']): string {
@@ -50,6 +67,7 @@ export class MinhaConta {
 
   logout(): void {
     this.authService.logout();
+
     this.router.navigate(['/']);
   }
 }

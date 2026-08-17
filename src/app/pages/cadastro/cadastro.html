@@ -1,40 +1,24 @@
 <main class="register-page">
   <section class="register-section">
     <div class="register-container">
-
       <div class="register-brand">
-        <span class="register-label">
-          ARAÚJO FREITAS ADVOGADOS
-        </span>
+        <span class="register-label"> ARAÚJO FREITAS ADVOGADOS </span>
 
         <h1>Crie sua conta</h1>
 
-        <p>
-          Cadastre-se para solicitar atendimentos e acompanhar suas
-          solicitações.
-        </p>
+        <p>Cadastre-se para solicitar atendimentos e acompanhar suas solicitações.</p>
       </div>
 
       <div class="register-card">
-
         <div class="register-card-header">
           <h2>Cadastro</h2>
 
-          <p>
-            Preencha seus dados para criar sua conta de cliente.
-          </p>
+          <p>Preencha seus dados para criar sua conta de cliente.</p>
         </div>
 
-        <form
-          class="register-form"
-          [formGroup]="cadastroForm"
-          (ngSubmit)="submit()"
-        >
-
+        <form class="register-form" [formGroup]="cadastroForm" (ngSubmit)="submit()">
           <div class="form-group">
-            <label for="name">
-              Nome completo
-            </label>
+            <label for="name"> Nome completo </label>
 
             <input
               id="name"
@@ -46,16 +30,12 @@
             />
 
             @if (isInvalid('name')) {
-              <span class="error-message">
-                Informe seu nome completo.
-              </span>
+              <span class="error-message"> Informe seu nome completo. </span>
             }
           </div>
 
           <div class="form-group">
-            <label for="email">
-              E-mail
-            </label>
+            <label for="email"> E-mail </label>
 
             <input
               id="email"
@@ -67,16 +47,12 @@
             />
 
             @if (isInvalid('email')) {
-              <span class="error-message">
-                Informe um e-mail válido.
-              </span>
+              <span class="error-message"> Informe um e-mail válido. </span>
             }
           </div>
 
           <div class="form-group">
-            <label for="phone">
-              Telefone
-            </label>
+            <label for="phone"> Telefone </label>
 
             <input
               id="phone"
@@ -88,16 +64,12 @@
             />
 
             @if (isInvalid('phone')) {
-              <span class="error-message">
-                Informe um telefone válido.
-              </span>
+              <span class="error-message"> Informe um telefone válido. </span>
             }
           </div>
 
           <div class="form-group">
-            <label for="password">
-              Senha
-            </label>
+            <label for="password"> Senha </label>
 
             <input
               id="password"
@@ -109,16 +81,12 @@
             />
 
             @if (isInvalid('password')) {
-              <span class="error-message">
-                A senha deve possuir pelo menos 6 caracteres.
-              </span>
+              <span class="error-message"> A senha deve possuir pelo menos 6 caracteres. </span>
             }
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">
-              Confirmar senha
-            </label>
+            <label for="confirmPassword"> Confirmar senha </label>
 
             <input
               id="confirmPassword"
@@ -130,9 +98,7 @@
             />
 
             @if (isInvalid('confirmPassword')) {
-              <span class="error-message">
-                Confirme sua senha.
-              </span>
+              <span class="error-message"> Confirme sua senha. </span>
             }
           </div>
 
@@ -142,34 +108,17 @@
             </div>
           }
 
-          <button
-            type="submit"
-            class="register-button"
-          >
-            Criar minha conta
-          </button>
-
+          <button type="submit" class="register-button">Criar minha conta</button>
         </form>
 
         <div class="register-login">
-          <span>
-            Já possui uma conta?
-          </span>
+          <span> Já possui uma conta? </span>
 
-          <a routerLink="/login">
-            Entrar
-          </a>
+          <a routerLink="/login"> Entrar </a>
         </div>
 
-        <a
-          routerLink="/"
-          class="back-link"
-        >
-          Voltar para o site
-        </a>
-
+        <a routerLink="/" class="back-link"> Voltar para o site </a>
       </div>
-
     </div>
   </section>
 </main>

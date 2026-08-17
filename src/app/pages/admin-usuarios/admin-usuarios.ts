@@ -17,9 +17,7 @@ export class AdminUsuarios {
   }
 
   removeUser(id: number): void {
-    const confirmed = confirm(
-      'Deseja realmente excluir este usuário?',
-    );
+    const confirmed = confirm('Deseja realmente excluir este usuário?');
 
     if (!confirmed) {
       return;
@@ -33,21 +31,15 @@ export class AdminUsuarios {
   }
 
   get clientsCount(): number {
-    return this.users.filter(
-      (user) => user.role === 'user',
-    ).length;
+    return this.users.filter((user) => user.role === 'user').length;
   }
 
   get lawyersCount(): number {
-    return this.users.filter(
-      (user) => user.role === 'lawyer',
-    ).length;
+    return this.users.filter((user) => user.role === 'lawyer').length;
   }
 
   get adminsCount(): number {
-    return this.users.filter(
-      (user) => user.role === 'admin',
-    ).length;
+    return this.users.filter((user) => user.role === 'admin').length;
   }
 
   getRoleLabel(role: User['role']): string {

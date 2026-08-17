@@ -3,6 +3,9 @@ import { FormsModule } from '@angular/forms';
 
 import { LawyerService } from '../../services/lawyer.service';
 import { AreaService } from '../../services/area.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { AuthService } from '../../services/auth.service';
+
 import { Lawyer } from '../../interfaces/lawyer';
 
 @Component({
@@ -12,22 +15,18 @@ import { Lawyer } from '../../interfaces/lawyer';
   styleUrl: './admin-advogados.css',
 })
 export class AdminAdvogados {
-  private readonly lawyerService =
-    inject(LawyerService);
+  private readonly lawyerService = inject(LawyerService);
 
-  private readonly areaService =
-    inject(AreaService);
+  private readonly areaService = inject(AreaService);
 
-  readonly lawyers =
-    this.lawyerService.all;
+  private readonly appointmentService = inject(AppointmentService);
+
+  private readonly authService = inject(AuthService);
+
+  readonly lawyers = this.lawyerService.all;
 
   showForm = false;
   areaMenuOpen = false;
-
-  /*
-   * null = criando novo advogado
-   * número = editando advogado existente
-   */
   editingLawyerId: number | null = null;
 
   name = '';
@@ -36,7 +35,6 @@ export class AdminAdvogados {
   selectedAreas: string[] = [];
   bio = '';
   image = '';
-
   imagePreview = '';
 
   get areas() {
@@ -47,70 +45,44 @@ export class AdminAdvogados {
     return this.areas;
   }
 
-  get areasCount(): number {
-    return this.areas.length;
-  }
-
   get totalLawyers(): number {
     return this.lawyers().length;
   }
 
-  getLawyerSpecialties(
-    lawyer: Lawyer,
-  ): string {
+  getLawyerSpecialties(lawyer: Lawyer): string {
     return lawyer.specialties.join(', ');
   }
 
   openForm(): void {
-    this.editingLawyerId = null;
-
     this.clearForm();
-
     this.showForm = true;
-    this.areaMenuOpen = false;
   }
 
   closeForm(): void {
     this.showForm = false;
-    this.areaMenuOpen = false;
-
     this.clearForm();
   }
 
   editLawyer(lawyer: Lawyer): void {
     this.editingLawyerId = lawyer.id;
-
     this.name = lawyer.name;
     this.role = lawyer.role;
     this.oab = lawyer.oab;
-
-    this.selectedAreas = [
-      ...lawyer.specialties,
-    ];
-
+    this.selectedAreas = [...lawyer.specialties];
     this.bio = lawyer.bio;
-
     this.image = lawyer.image;
     this.imagePreview = lawyer.image;
-
     this.areaMenuOpen = false;
     this.showForm = true;
   }
 
   toggleArea(area: string): void {
     if (this.selectedAreas.includes(area)) {
-      this.selectedAreas =
-        this.selectedAreas.filter(
-          (item) => item !== area,
-        );
-
+      this.selectedAreas = this.selectedAreas.filter((item) => item !== area);
       return;
     }
 
-    this.selectedAreas = [
-      ...this.selectedAreas,
-      area,
-    ];
+    this.selectedAreas = [...this.selectedAreas, area];
   }
 
   isAreaSelected(area: string): boolean {
@@ -118,15 +90,11 @@ export class AdminAdvogados {
   }
 
   removeSelectedArea(area: string): void {
-    this.selectedAreas =
-      this.selectedAreas.filter(
-        (item) => item !== area,
-      );
+    this.selectedAreas = this.selectedAreas.filter((item) => item !== area);
   }
 
   toggleAreaMenu(): void {
-    this.areaMenuOpen =
-      !this.areaMenuOpen;
+    this.areaMenuOpen = !this.areaMenuOpen;
   }
 
   closeAreaMenu(): void {
@@ -147,20 +115,15 @@ export class AdminAdvogados {
     event.preventDefault();
     event.stopPropagation();
 
-    const file =
-      event.dataTransfer?.files?.[0];
+    const file = event.dataTransfer?.files?.[0];
 
-    if (!file) {
-      return;
+    if (file) {
+      this.processImage(file);
     }
-
-    this.processImage(file);
   }
 
   handleImageSelect(event: Event): void {
-    const input =
-      event.target as HTMLInputElement;
-
+    const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
     if (!file) {
@@ -168,7 +131,6 @@ export class AdminAdvogados {
     }
 
     this.processImage(file);
-
     input.value = '';
   }
 
@@ -190,9 +152,7 @@ export class AdminAdvogados {
   }
 
   handleImageError(event: Event): void {
-    const image =
-      event.target as HTMLImageElement;
-
+    const image = event.target as HTMLImageElement;
     image.style.display = 'none';
   }
 
@@ -201,24 +161,11 @@ export class AdminAdvogados {
     const role = this.role.trim();
     const oab = this.oab.trim();
     const bio = this.bio.trim();
-
     const uniqueAreas = [
-      ...new Set(
-        this.selectedAreas
-          .map((area) => area.trim())
-          .filter(
-            (area) => area.length > 0,
-          ),
-      ),
+      ...new Set(this.selectedAreas.map((area) => area.trim()).filter((area) => area.length > 0)),
     ];
 
-    if (
-      !name ||
-      !role ||
-      !oab ||
-      !bio ||
-      uniqueAreas.length === 0
-    ) {
+    if (!name || !role || !oab || !bio || uniqueAreas.length === 0) {
       return;
     }
 
@@ -231,37 +178,54 @@ export class AdminAdvogados {
       image: this.image,
     };
 
-    /*
-     * Se existe um ID sendo editado,
-     * atualiza o advogado.
-     *
-     * Caso contrário,
-     * cria um novo.
-     */
-    if (
-      this.editingLawyerId !== null
-    ) {
-      this.lawyerService.updateLawyer(
-        this.editingLawyerId,
-        data,
-      );
-    } else {
-      this.lawyerService.addLawyer(
-        data,
-      );
+    if (this.editingLawyerId !== null) {
+      const lawyer = this.lawyerService.updateLawyer(this.editingLawyerId, data);
+
+      if (!lawyer) {
+        return;
+      }
+
+      this.authService.updateLawyerAccount(lawyer.id, lawyer.name);
+
+      this.appointmentService.removeLawyerAssignmentsOutsideAreas(lawyer.id, lawyer.specialties);
+
+      this.closeForm();
+      return;
+    }
+
+    const lawyer = this.lawyerService.addLawyer(data);
+    const account = this.authService.createLawyerAccount(lawyer.id, lawyer.name);
+
+    if (!account) {
+      this.lawyerService.removeLawyer(lawyer.id);
+      return;
     }
 
     this.closeForm();
   }
 
   removeLawyer(id: number): void {
+    const lawyer = this.lawyerService.getById(id);
+
+    if (!lawyer) {
+      return;
+    }
+
+    const confirmed = confirm(
+      `Deseja realmente excluir o advogado ${lawyer.name}? Os agendamentos serão mantidos e ficarão sem advogado.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.appointmentService.removeLawyerAssignments(id);
+    this.authService.removeLawyerAccount(id);
     this.lawyerService.removeLawyer(id);
   }
 
   private processImage(file: File): void {
-    if (
-      !file.type.startsWith('image/')
-    ) {
+    if (!file.type.startsWith('image/')) {
       return;
     }
 
@@ -272,8 +236,7 @@ export class AdminAdvogados {
     const reader = new FileReader();
 
     reader.onload = () => {
-      const result =
-        reader.result;
+      const result = reader.result;
 
       if (typeof result !== 'string') {
         return;
@@ -288,22 +251,13 @@ export class AdminAdvogados {
 
   private clearForm(): void {
     this.editingLawyerId = null;
-
     this.name = '';
-
-    this.role =
-      'Advogado(a) Associado(a)';
-
+    this.role = 'Advogado(a) Associado(a)';
     this.oab = '';
-
     this.selectedAreas = [];
-
     this.bio = '';
-
     this.image = '';
-
     this.imagePreview = '';
-
     this.areaMenuOpen = false;
   }
 }

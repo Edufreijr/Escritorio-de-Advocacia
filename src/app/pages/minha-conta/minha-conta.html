@@ -1,33 +1,22 @@
 <main class="account-page">
   <section class="account-section">
     <div class="account-container">
-
       <header class="account-header">
         <div>
-          <span class="section-label">
-            ÁREA DO CLIENTE
-          </span>
+          <span class="section-label"> ÁREA DO CLIENTE </span>
 
-          <h1>Olá, {{ user()?.name }}</h1>
+          <h1>
+            Olá,
+            {{ user()?.name }}
+          </h1>
 
-          <p>
-            Consulte seus dados e acompanhe seus agendamentos.
-          </p>
+          <p>Consulte seus dados e acompanhe seus atendimentos.</p>
         </div>
 
         <div class="account-actions">
-          <a
-            routerLink="/"
-            class="account-button"
-          >
-            Voltar para o site
-          </a>
+          <a routerLink="/" class="account-button"> Voltar para o site </a>
 
-          <button
-            type="button"
-            class="account-button account-button-dark"
-            (click)="logout()"
-          >
+          <button type="button" class="account-button account-button-dark" (click)="logout()">
             Sair
           </button>
         </div>
@@ -35,9 +24,7 @@
 
       <section class="account-card">
         <div class="account-card-header">
-          <span class="section-label">
-            MEUS DADOS
-          </span>
+          <span class="section-label"> MEUS DADOS </span>
 
           <h2>Informações da conta</h2>
         </div>
@@ -45,72 +32,53 @@
         <div class="account-info">
           <div>
             <span>Nome</span>
-            <strong>{{ user()?.name }}</strong>
+            <strong>
+              {{ user()?.name }}
+            </strong>
           </div>
 
           <div>
             <span>E-mail</span>
-            <strong>{{ user()?.email }}</strong>
+            <strong>
+              {{ user()?.email }}
+            </strong>
           </div>
 
           <div>
             <span>Perfil</span>
-            <strong>Cliente</strong>
+            <strong> Cliente </strong>
           </div>
         </div>
       </section>
 
       <section class="account-card">
         <div class="account-card-header">
-          <span class="section-label">
-            ATENDIMENTOS
-          </span>
+          <span class="section-label"> ATENDIMENTOS </span>
 
           <h2>Meus agendamentos</h2>
 
-          <p>
-            Acompanhe aqui os atendimentos solicitados ao escritório.
-          </p>
+          <p>Acompanhe aqui os atendimentos solicitados ao escritório.</p>
         </div>
 
         @if (myAppointments.length === 0) {
-
           <div class="account-empty">
-            <div class="account-empty-icon">
-              📅
-            </div>
+            <div class="account-empty-icon">📅</div>
 
             <h3>Nenhum agendamento encontrado</h3>
 
-            <p>
-              Você ainda não possui nenhum atendimento agendado.
-            </p>
+            <p>Você ainda não possui nenhum atendimento agendado.</p>
 
-            <a
-              routerLink="/agendamento"
-              class="account-button account-button-gold"
-            >
+            <a routerLink="/agendamento" class="account-button account-button-gold">
               Solicitar atendimento
             </a>
           </div>
-
         } @else {
-
           <div class="appointments-list">
-
-            @for (
-              appointment of myAppointments;
-              track appointment.id
-            ) {
-
+            @for (appointment of myAppointments; track appointment.id) {
               <article class="appointment-item">
-
                 <div class="appointment-main">
-
                   <div>
-                    <span class="appointment-label">
-                      ÁREA
-                    </span>
+                    <span class="appointment-label"> ÁREA </span>
 
                     <h3>
                       {{ appointment.area }}
@@ -125,57 +93,62 @@
                   >
                     {{ getStatusLabel(appointment.status) }}
                   </span>
+                </div>
 
+                <div class="appointment-lawyer">
+                  <span> ADVOGADO </span>
+
+                  <strong>
+                    {{ getLawyerName(appointment.lawyerId) }}
+                  </strong>
                 </div>
 
                 <div class="appointment-details">
-
                   <div>
-                    <span>Data</span>
-                    <strong>{{ appointment.date }}</strong>
+                    <span> Data </span>
+
+                    <strong>
+                      {{ appointment.date }}
+                    </strong>
                   </div>
 
                   <div>
-                    <span>Horário</span>
-                    <strong>{{ appointment.time }}</strong>
+                    <span> Horário </span>
+
+                    <strong>
+                      {{ appointment.time }}
+                    </strong>
                   </div>
 
                   <div>
-                    <span>Telefone</span>
-                    <strong>{{ appointment.phone }}</strong>
-                  </div>
+                    <span> Telefone </span>
 
+                    <strong>
+                      {{ appointment.phone }}
+                    </strong>
+                  </div>
                 </div>
 
                 @if (appointment.message) {
                   <div class="appointment-message">
-                    <span>Mensagem</span>
+                    <span> Mensagem </span>
 
                     <p>
                       {{ appointment.message }}
                     </p>
                   </div>
                 }
-
               </article>
-
             }
-
           </div>
 
           <div class="account-footer-action">
-            <a
-              routerLink="/agendamento"
-              class="account-button account-button-gold"
-            >
+            <a routerLink="/agendamento" class="account-button account-button-gold">
               Novo agendamento
             </a>
           </div>
-
         }
-
       </section>
-
     </div>
   </section>
 </main>

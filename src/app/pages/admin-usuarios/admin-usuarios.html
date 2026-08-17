@@ -1,5 +1,4 @@
 <section class="admin-page">
-
   <header class="page-header">
     <div>
       <span class="section-label">GESTÃO</span>
@@ -9,7 +8,6 @@
   </header>
 
   <section class="stats-grid">
-
     <article class="stat-card">
       <span class="stat-label">TOTAL</span>
       <strong>{{ totalUsers }}</strong>
@@ -33,11 +31,9 @@
       <strong>{{ adminsCount }}</strong>
       <span class="stat-description">Administradores do sistema</span>
     </article>
-
   </section>
 
   <section class="content-card">
-
     <header class="card-header">
       <div>
         <span class="card-label">USUÁRIOS</span>
@@ -46,19 +42,14 @@
     </header>
 
     @if (users.length === 0) {
-
       <div class="empty-state">
         <span class="empty-icon">◉</span>
         <h3>Nenhum usuário encontrado</h3>
         <p>Os usuários cadastrados aparecerão nesta área.</p>
       </div>
-
     } @else {
-
       <div class="table-wrapper">
-
         <table class="admin-table">
-
           <thead>
             <tr>
               <th>Usuário</th>
@@ -71,14 +62,10 @@
           </thead>
 
           <tbody>
-
             @for (user of users; track user.id) {
-
               <tr>
-
                 <td>
                   <div class="user-info">
-
                     <div class="user-avatar">
                       {{ user.name.charAt(0).toUpperCase() }}
                     </div>
@@ -87,7 +74,6 @@
                       <strong>{{ user.name }}</strong>
                       <span>ID #{{ user.id }}</span>
                     </div>
-
                   </div>
                 </td>
 
@@ -104,7 +90,6 @@
                 </td>
 
                 <td>
-
                   <span
                     class="role-badge"
                     [class.client]="user.role === 'user'"
@@ -119,49 +104,26 @@
                           : 'Cliente'
                     }}
                   </span>
-
                 </td>
 
                 <td>
-                  <span class="status active">
-                    Ativo
-                  </span>
+                  <span class="status active"> Ativo </span>
                 </td>
 
                 <td>
-
                   @if (user.role !== 'admin') {
-
-                    <button
-                      type="button"
-                      class="delete-button"
-                      (click)="removeUser(user.id)"
-                    >
+                    <button type="button" class="delete-button" (click)="removeUser(user.id)">
                       Excluir
                     </button>
-
                   } @else {
-
-                    <span class="contact-text">
-                      Protegido
-                    </span>
-
+                    <span class="contact-text"> Protegido </span>
                   }
-
                 </td>
-
               </tr>
-
             }
-
           </tbody>
-
         </table>
-
       </div>
-
     }
-
   </section>
-
 </section>

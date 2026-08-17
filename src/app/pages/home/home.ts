@@ -10,13 +10,7 @@ import { LawyerService } from '../../services/lawyer.service';
 
 @Component({
   selector: 'app-home',
-  imports: [
-    RouterLink,
-    Hero,
-    AreaCard,
-    LawyerCard,
-    TestimonialCard,
-  ],
+  imports: [RouterLink, Hero, AreaCard, LawyerCard, TestimonialCard],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
