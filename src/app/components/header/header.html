@@ -1,25 +1,119 @@
 <header class="header">
   <div class="header-container">
-    <a routerLink="/" class="logo">
-      <span class="logo-name">ARAÚJO FREITAS</span>
-      <span class="logo-subtitle">ADVOGADOS</span>
+
+    <a
+      routerLink="/"
+      class="logo"
+      (click)="closeMenu()"
+    >
+      <span class="logo-name">
+        ARAÚJO FREITAS
+      </span>
+
+      <span class="logo-subtitle">
+        ADVOGADOS
+      </span>
     </a>
 
-    <nav class="navigation">
-      <a routerLink="/" class="nav-link">Início</a>
-      <a routerLink="/sobre" class="nav-link">Sobre</a>
-      <a routerLink="/areas" class="nav-link">Áreas de Atuação</a>
-      <a routerLink="/advogados" class="nav-link">Advogados</a>
-      <a routerLink="/agendamento" class="nav-link">Agendamento</a>
-      <a routerLink="/contato" class="nav-link">Contato</a>
+    <button
+      type="button"
+      class="menu-toggle"
+      [class.open]="menuOpen"
+      [attr.aria-expanded]="menuOpen"
+      aria-label="Abrir menu"
+      (click)="toggleMenu()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav
+      class="navigation"
+      [class.mobile-open]="menuOpen"
+    >
+      <a
+        routerLink="/"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Início
+      </a>
+
+      <a
+        routerLink="/sobre"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Sobre
+      </a>
+
+      <a
+        routerLink="/areas"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Áreas de Atuação
+      </a>
+
+      <a
+        routerLink="/advogados"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Advogados
+      </a>
+
+      <a
+        routerLink="/agendamento"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Agendamento
+      </a>
+
+      <a
+        routerLink="/contato"
+        class="nav-link"
+        (click)="closeMenu()"
+      >
+        Contato
+      </a>
+
+      @if (authService.isLoggedIn()) {
+        <a
+          [routerLink]="panelRoute"
+          class="login-button mobile-login"
+          (click)="closeMenu()"
+        >
+          {{ panelLabel }}
+        </a>
+      } @else {
+        <a
+          routerLink="/login"
+          class="login-button mobile-login"
+          (click)="closeMenu()"
+        >
+          Login
+        </a>
+      }
     </nav>
 
     @if (authService.isLoggedIn()) {
-      <a [routerLink]="panelRoute" class="login-button">
+      <a
+        [routerLink]="panelRoute"
+        class="login-button desktop-login"
+      >
         {{ panelLabel }}
       </a>
     } @else {
-      <a routerLink="/login" class="login-button"> Login </a>
+      <a
+        routerLink="/login"
+        class="login-button desktop-login"
+      >
+        Login
+      </a>
     }
+
   </div>
 </header>

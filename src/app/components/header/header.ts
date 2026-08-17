@@ -12,6 +12,8 @@ import { AuthService } from '../../services/auth.service';
 export class Header {
   readonly authService = inject(AuthService);
 
+  menuOpen = false;
+
   get panelRoute(): string {
     const user = this.authService.getCurrentUser();
 
@@ -46,5 +48,13 @@ export class Header {
       default:
         return 'Login';
     }
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
   }
 }

@@ -195,8 +195,17 @@ export class AuthService {
       role: 'admin',
     };
 
+    const defaultClientUser: User = {
+      id: 2,
+      name: 'Cliente Padrão',
+      email: 'cliente@araujoefreitas.com',
+      phone: '(00) 00000-0000',
+      password: '123456',
+      role: 'user',
+    };
+
     if (!storedUsers) {
-      const users = [adminUser, ...seedUsers, ...seedLawyerUsers];
+      const users = [adminUser, defaultClientUser, ...seedUsers, ...seedLawyerUsers];
 
       this.saveUsers(users);
 
@@ -210,23 +219,33 @@ export class AuthService {
         throw new Error('Invalid users storage');
       }
 
-      const users = parsedUsers
-        .filter(
-          (user): user is User =>
-            !!user &&
-            typeof user.id === 'number' &&
-            typeof user.name === 'string' &&
-            typeof user.email === 'string' &&
-            typeof user.phone === 'string' &&
-            typeof user.password === 'string' &&
-            ['user', 'lawyer', 'admin'].includes(user.role),
-        )
-        .filter((user) => user.id !== 2 && user.email !== 'advogado@araujoefreitas.com');
+      const users = parsedUsers.filter(
+        (user): user is User =>
+          !!user &&
+          typeof user.id === 'number' &&
+          typeof user.name === 'string' &&
+          typeof user.email === 'string' &&
+          typeof user.phone === 'string' &&
+          typeof user.password === 'string' &&
+          ['user', 'lawyer', 'admin'].includes(user.role),
+      );
 
-      const hasAdmin = users.some((user) => user.id === 1 && user.role === 'admin');
+      const hasAdmin = users.some(
+        (user) => user.id === 1 && user.role === 'admin',
+      );
 
       if (!hasAdmin) {
         users.unshift(adminUser);
+      }
+
+      const hasDefaultClient = users.some(
+        (user) =>
+          user.id === defaultClientUser.id &&
+          user.email.toLowerCase() === defaultClientUser.email.toLowerCase(),
+      );
+
+      if (!hasDefaultClient) {
+        users.push(defaultClientUser);
       }
 
       this.saveUsers(users);
@@ -235,7 +254,7 @@ export class AuthService {
     } catch {
       localStorage.removeItem(this.usersStorageKey);
 
-      const users = [adminUser, ...seedUsers, ...seedLawyerUsers];
+      const users = [adminUser, defaultClientUser, ...seedUsers, ...seedLawyerUsers];
 
       this.saveUsers(users);
 
@@ -312,12 +331,6 @@ export class AuthService {
         typeof user.password !== 'string' ||
         !['user', 'lawyer', 'admin'].includes(user.role)
       ) {
-        localStorage.removeItem(this.storageKey);
-
-        return null;
-      }
-
-      if (user.id === 2 || user.email === 'advogado@araujoefreitas.com') {
         localStorage.removeItem(this.storageKey);
 
         return null;
